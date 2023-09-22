@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "842529856758",
+    "project_id": "dquark-e686c",
+    "storage_bucket": "dquark-e686c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842529856758:android:864127332126ca4be4a0d7",
+        "android_client_info": {
+          "package_name": "com.dquark.quarkz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCN22MCaGUWXBvf-vl-S0FRmADRhu2qEUw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
