@@ -1,4 +1,4 @@
-package com.quarkapp;
+package com.dquark.quarkz;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

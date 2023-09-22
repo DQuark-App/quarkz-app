@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.quarkapp"
+    namespace "com.dquark.quarkz"
     defaultConfig {
-        applicationId "com.quarkapp"
+        applicationId "com.dquark.quarkz"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

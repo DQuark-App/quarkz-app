@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface QuarkAppTests : XCTestCase
+@interface DQuarkTests : XCTestCase
 
 @end
 
-@implementation QuarkAppTests
+@implementation DQuarkTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {
