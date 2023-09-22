@@ -5,6 +5,7 @@ import Main from './screen/main';
 import Providers from './providers';
 import Login from './screen/login';
 import useStore from './store';
+import Register from './screen/register';
 
 const Stack = createNativeStackNavigator();
 //Use {navigation} : {navigation: NavigationProp} on pros to get navigation prop
@@ -13,12 +14,15 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={'Home'}
+        initialRouteName={store.user != null ? 'Home' : 'Login'}
         screenOptions={{navigationBarHidden: true, headerShown: false}}>
         {store.user != null ? (
           <Stack.Screen name="Home" component={Main} />
         ) : (
-          <Stack.Screen name="Home" component={Login} />
+          <>
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>

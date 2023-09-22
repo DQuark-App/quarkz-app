@@ -2,7 +2,7 @@ import {create} from 'zustand';
 import {devtools, persist} from 'zustand/middleware';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {createJSONStorage} from 'zustand/middleware/persist';
+import {createJSONStorage} from 'zustand/middleware';
 
 interface AppState {
   user: FirebaseAuthTypes.User | null;
@@ -41,7 +41,15 @@ const useStore = create<AppState>()(
           auth().signOut();
         },
       }),
-      {name: 'appStore', storage: createJSONStorage(() => AsyncStorage)},
+      {
+        name: 'appStore',
+        storage: createJSONStorage(() => AsyncStorage),
+        partialize: state => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const {user, ...rest} = state;
+          return rest;
+        },
+      },
     ),
   ),
 );

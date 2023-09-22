@@ -8,7 +8,6 @@ import * as bs58 from 'bs58';
 export const signMessage = async () => {
   return await transact(async wallet => {
     const message = APP_MESSAGE.toString('utf-8') || '';
-    console.log('message', message);
     const messageBuffer = new TextEncoder().encode(message);
     // Authorize the wallet session.
     const authorizationResult = await wallet.authorize({
@@ -27,8 +26,10 @@ export const signMessage = async () => {
       addresses: [addresses[0]],
     });
     // Construct the raw token.
-    const rawToken =
-      pubKey + '&&' + Buffer.from(signature[0]).toString('base64');
+    const rawToken = Buffer.from(
+      pubKey + '&&' + Buffer.from(signature[0]).toString('base64'),
+      'utf-8',
+    ).toString('base64');
 
     return [rawToken, pubKey, authorizationResult.auth_token];
   });

@@ -5,60 +5,24 @@ import {Column, Row} from '../components/grid';
 import Logo from '../img/logo-no-background.png';
 import auth from '@react-native-firebase/auth';
 import {useState} from 'react';
-import {signMessage} from '../utils/wallet';
-// @ts-ignore
-import {API_URL} from '@env';
-import useStore from '../store';
 import {NavigationProp} from '@react-navigation/native';
-function Login({navigation}: {navigation: NavigationProp<any>}) {
-  const store = useStore();
+function Register({navigation}: {navigation: NavigationProp<any>}) {
   const theme = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [cpassword, setCPassword] = useState('');
   const [error, setError] = useState('');
-  const loginUsingEmail = async () => {
-    setError('');
+  const registerUsingEmail = async () => {
     try {
-      if (errorEmail() || errorPassword()) {
+      if (errorEmail() || errorPassword() || errorCPassword()) {
         return;
       }
-      await auth().signInWithEmailAndPassword(email, password);
+      await auth().createUserWithEmailAndPassword(email, password);
+
+      navigation.navigate('Login');
     } catch (e) {
       console.log(e);
-      setError('Invalid Email or Password');
-    }
-  };
-
-  const loginUsingWallet = async () => {
-    setError('');
-    try {
-      const [DQToken, pubKey, walletAuth] = await signMessage();
-
-      store.setWalletToken(walletAuth, pubKey);
-
-      const response = await fetch(`${API_URL}/custom-token`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `${DQToken}`,
-          pragma: 'no-cache',
-          cache: 'no-store',
-        },
-      });
-      if (response.status !== 200) {
-        console.log(await response.text());
-        setError('Cannot get token from server');
-        return;
-      }
-      const json = await response.json();
-      console.log(json);
-      const data = json as {token: string};
-      console.log(data);
-      await auth().signInWithCustomToken(data.token);
-    } catch (e) {
-      const error = e as Error;
-      const errorMessage = error.message || 'Cannot connect to wallet';
-      setError(errorMessage);
+      setError('Failed to register');
     }
   };
 
@@ -67,7 +31,11 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
   };
 
   const errorPassword = () => {
-    return password === '';
+    return password === '' || password.length < 6;
+  };
+
+  const errorCPassword = () => {
+    return cpassword === '';
   };
 
   return (
@@ -98,7 +66,7 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
                 fontSize: 30,
                 fontWeight: 'bold',
               }}>
-              Welcome to DQuark
+              Register
             </Text>
           </Row>
           <HelperText type="error" visible={error !== ''}>
@@ -132,36 +100,40 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
             label={'Password'}
           />
           <HelperText type="error" visible={errorPassword()}>
-            * Password is Empty!
+            * Password is Empty! (min. 6 character)
+          </HelperText>
+          <TextInput
+            theme={theme}
+            mode={'outlined'}
+            textContentType={'password'}
+            secureTextEntry={true}
+            style={{
+              backgroundColor: theme.colors.onSurface,
+              marginBottom: 8,
+            }}
+            onChangeText={setCPassword}
+            textColor={theme.colors.surface}
+            label={'Password Confirmation'}
+          />
+          <HelperText type="error" visible={errorCPassword()}>
+            * Password Confirmation is Empty!
           </HelperText>
           <Button
             mode={'contained'}
             style={{marginBottom: 8}}
-            onPress={loginUsingEmail}>
-            <Text style={{color: theme.colors.surface}}>Login</Text>
+            onPress={registerUsingEmail}>
+            <Text style={{color: theme.colors.surface}}>Register</Text>
           </Button>
-          <Button
-            mode={'outlined'}
-            style={{marginBottom: 8}}
-            onPress={loginUsingWallet}>
-            <Text style={{color: theme.colors.surface}}>Connect Wallet</Text>
-          </Button>
-          <Text
-            style={{
-              color: theme.colors.surface,
-              marginBottom: 8,
-              textAlign: 'center',
-            }}>
-            OR
-          </Text>
           <Button
             mode={'text'}
             onPress={() => {
-              navigation.navigate('Register');
+              navigation.navigate('Login');
             }}>
-            <Text style={{color: theme.colors.surface}}>New User ? </Text>
+            <Text style={{color: theme.colors.surface}}>
+              Already Has Account ?{' '}
+            </Text>
             <Text style={{color: theme.colors.surface, fontWeight: 'bold'}}>
-              Register Here
+              Login Here
             </Text>
           </Button>
         </Column>
@@ -170,4 +142,4 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
   );
 }
 
-export default Login;
+export default Register;
