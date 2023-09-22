@@ -40,7 +40,9 @@ function Setting() {
                     fontSize: 16,
                     margin: 10,
                   }}>
-                  {store.user?.email}
+                  {store.user?.email?.includes('@dquark.network')
+                    ? store.user?.uid
+                    : store.user?.email}
                 </Text>
               </Column>
             </View>

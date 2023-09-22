@@ -5,7 +5,12 @@ import {Column, Row} from '../components/grid';
 import Logo from '../img/logo-no-background.png';
 import auth from '@react-native-firebase/auth';
 import {useState} from 'react';
+import {signMessage} from '../utils/wallet';
+// @ts-ignore
+import {API_URL} from '@env';
+import useStore from '../store';
 function Login() {
+  const store = useStore();
   const theme = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,6 +24,31 @@ function Login() {
     } catch (e) {
       console.log(e);
       setError('Invalid Email or Password');
+    }
+  };
+
+  const loginUsingWallet = async () => {
+    try {
+      const [DQToken, pubKey, walletAuth] = await signMessage();
+      const response = await fetch(`${API_URL}/custom-token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: DQToken,
+        },
+      });
+      const json = await response.json();
+      const data = json as {token: string};
+
+      if (data.token === undefined || data.token === null) {
+        setError('Cannot connect to wallet');
+        return;
+      }
+      store.setWalletToken(walletAuth, pubKey);
+      await auth().signInWithCustomToken(data.token);
+    } catch (e) {
+      console.log(e);
+      setError('Cannot connect to wallet');
     }
   };
 
@@ -103,9 +133,7 @@ function Login() {
           <Button
             mode={'outlined'}
             style={{marginBottom: 8}}
-            onPress={() => {
-              console.log('login');
-            }}>
+            onPress={loginUsingWallet}>
             <Text style={{color: theme.colors.surface}}>Connect Wallet</Text>
           </Button>
           <Text
