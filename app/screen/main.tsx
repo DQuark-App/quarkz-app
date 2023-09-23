@@ -19,8 +19,8 @@ export default function Main() {
       }}
       tabBar={({navigation, state, descriptors, insets}) => (
         <BottomNavigation.Bar
-          style={{backgroundColor: theme.colors.onPrimaryContainer}}
-          activeColor={theme.colors.primary}
+          style={{backgroundColor: theme.colors.primary}}
+          activeColor={theme.colors.onPrimaryContainer}
           inactiveColor={theme.colors.surface}
           navigationState={state}
           safeAreaInsets={insets}

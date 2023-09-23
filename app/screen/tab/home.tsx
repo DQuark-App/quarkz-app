@@ -9,9 +9,9 @@ function Home() {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: theme.colors.onBackground,
+        backgroundColor: theme.colors.background,
       }}>
-      <Text style={{color: theme.colors.surface}}>Home Screen</Text>
+      <Text style={{color: theme.colors.onBackground}}>Home Screen</Text>
     </View>
   );
 }

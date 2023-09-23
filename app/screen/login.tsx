@@ -7,9 +7,10 @@ import auth from '@react-native-firebase/auth';
 import {useState} from 'react';
 import {signMessage} from '../utils/wallet';
 // @ts-ignore
-import {API_URL} from '@env';
+import {API_URL, APP_URL} from '@env';
 import useStore from '../store';
 import {NavigationProp} from '@react-navigation/native';
+import axios, {AxiosError} from 'axios';
 function Login({navigation}: {navigation: NavigationProp<any>}) {
   const store = useStore();
   const theme = useTheme();
@@ -36,28 +37,26 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
 
       store.setWalletToken(walletAuth, pubKey);
 
-      const response = await fetch(`${API_URL}/custom-token`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `${DQToken}`,
-          pragma: 'no-cache',
-          cache: 'no-store',
+      const response = await axios.post(
+        `${API_URL}/api/custom-token`,
+        {},
+        {
+          headers: {
+            'content-type': 'application/json',
+            authorization: DQToken,
+          },
         },
-      });
-      if (response.status !== 200) {
-        console.log(await response.text());
-        setError('Cannot get token from server');
-        return;
-      }
-      const json = await response.json();
-      console.log(json);
+      );
+
+      const json = await response.data;
       const data = json as {token: string};
-      console.log(data);
       await auth().signInWithCustomToken(data.token);
     } catch (e) {
-      const error = e as Error;
-      const errorMessage = error.message || 'Cannot connect to wallet';
+      const error = e as AxiosError;
+      console.log(error.response?.data);
+      const serverError = error.response?.data as {error: string};
+      const errorMessage =
+        serverError.error || error.message || 'Cannot connect to wallet';
       setError(errorMessage);
     }
   };
@@ -73,7 +72,7 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
   return (
     <View
       style={{
-        backgroundColor: theme.colors.onBackground,
+        backgroundColor: theme.colors.background,
         width: '100%',
         height: '100%',
         flex: 1,
@@ -92,7 +91,7 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
           <Row alignItems={'center'} justifyContent={'center'}>
             <Text
               style={{
-                color: theme.colors.surface,
+                color: theme.colors.onSurface,
                 marginTop: 30,
                 marginBottom: 30,
                 fontSize: 30,
@@ -108,11 +107,11 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
             theme={theme}
             mode={'outlined'}
             style={{
-              backgroundColor: theme.colors.onSurface,
+              backgroundColor: theme.colors.surface,
               marginBottom: 8,
             }}
             onChangeText={setEmail}
-            textColor={theme.colors.surface}
+            textColor={theme.colors.onSurface}
             label={'Email'}
           />
           <HelperText type="error" visible={errorEmail()}>
@@ -124,11 +123,11 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
             textContentType={'password'}
             secureTextEntry={true}
             style={{
-              backgroundColor: theme.colors.onSurface,
+              backgroundColor: theme.colors.surface,
               marginBottom: 8,
             }}
             onChangeText={setPassword}
-            textColor={theme.colors.surface}
+            textColor={theme.colors.onSurface}
             label={'Password'}
           />
           <HelperText type="error" visible={errorPassword()}>
@@ -144,11 +143,13 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
             mode={'outlined'}
             style={{marginBottom: 8}}
             onPress={loginUsingWallet}>
-            <Text style={{color: theme.colors.surface}}>Connect Wallet</Text>
+            <Text style={{color: theme.colors.onBackground}}>
+              Connect Wallet
+            </Text>
           </Button>
           <Text
             style={{
-              color: theme.colors.surface,
+              color: theme.colors.onBackground,
               marginBottom: 8,
               textAlign: 'center',
             }}>
@@ -159,8 +160,8 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
             onPress={() => {
               navigation.navigate('Register');
             }}>
-            <Text style={{color: theme.colors.surface}}>New User ? </Text>
-            <Text style={{color: theme.colors.surface, fontWeight: 'bold'}}>
+            <Text style={{color: theme.colors.onBackground}}>New User ? </Text>
+            <Text style={{color: theme.colors.onSurface, fontWeight: 'bold'}}>
               Register Here
             </Text>
           </Button>

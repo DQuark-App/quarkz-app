@@ -13,10 +13,12 @@ function Setting() {
         flex: 1,
         width: '100%',
         height: '100%',
-        backgroundColor: theme.colors.onBackground,
+        backgroundColor: theme.colors.background,
         padding: 15,
       }}>
-      <Text style={{color: theme.colors.surface, fontSize: 30}}>Setting</Text>
+      <Text style={{color: theme.colors.onBackground, fontSize: 30}}>
+        Setting
+      </Text>
       <View style={{flex: 1, marginTop: 20}}>
         <Column alignItems={'stretch'} justifyContent={'center'}>
           <Row alignItems={'flex-start'} justifyContent={'flex-start'}>
@@ -36,12 +38,17 @@ function Setting() {
               <Column alignItems={'stretch'} justifyContent={'flex-start'}>
                 <Text
                   style={{
-                    color: theme.colors.surface,
+                    color: theme.colors.onSurface,
                     fontSize: 16,
                     margin: 10,
                   }}>
                   {store.user?.email?.includes('@dquark.network')
-                    ? store.user?.uid
+                    ? store.user?.uid.substring(0, 8) +
+                      '...' +
+                      store.user?.uid.substring(
+                        store.user?.uid.length - 8,
+                        store.user?.uid.length,
+                      )
                     : store.user?.email}
                 </Text>
               </Column>
@@ -49,7 +56,7 @@ function Setting() {
           </Row>
           <List.Item
             style={{marginTop: 20}}
-            titleStyle={{color: theme.colors.surface}}
+            titleStyle={{color: theme.colors.onSurface, fontSize: 18}}
             title={'Logout'}
             onPress={() => {
               store.signOut();

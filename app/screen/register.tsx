@@ -41,7 +41,7 @@ function Register({navigation}: {navigation: NavigationProp<any>}) {
   return (
     <View
       style={{
-        backgroundColor: theme.colors.onBackground,
+        backgroundColor: theme.colors.background,
         width: '100%',
         height: '100%',
         flex: 1,
@@ -60,7 +60,7 @@ function Register({navigation}: {navigation: NavigationProp<any>}) {
           <Row alignItems={'center'} justifyContent={'center'}>
             <Text
               style={{
-                color: theme.colors.surface,
+                color: theme.colors.onSurface,
                 marginTop: 30,
                 marginBottom: 30,
                 fontSize: 30,
@@ -76,11 +76,11 @@ function Register({navigation}: {navigation: NavigationProp<any>}) {
             theme={theme}
             mode={'outlined'}
             style={{
-              backgroundColor: theme.colors.onSurface,
+              backgroundColor: theme.colors.surface,
               marginBottom: 8,
             }}
             onChangeText={setEmail}
-            textColor={theme.colors.surface}
+            textColor={theme.colors.onBackground}
             label={'Email'}
           />
           <HelperText type="error" visible={errorEmail()}>
@@ -92,11 +92,11 @@ function Register({navigation}: {navigation: NavigationProp<any>}) {
             textContentType={'password'}
             secureTextEntry={true}
             style={{
-              backgroundColor: theme.colors.onSurface,
+              backgroundColor: theme.colors.surface,
               marginBottom: 8,
             }}
             onChangeText={setPassword}
-            textColor={theme.colors.surface}
+            textColor={theme.colors.onSurface}
             label={'Password'}
           />
           <HelperText type="error" visible={errorPassword()}>
@@ -108,11 +108,11 @@ function Register({navigation}: {navigation: NavigationProp<any>}) {
             textContentType={'password'}
             secureTextEntry={true}
             style={{
-              backgroundColor: theme.colors.onSurface,
+              backgroundColor: theme.colors.surface,
               marginBottom: 8,
             }}
             onChangeText={setCPassword}
-            textColor={theme.colors.surface}
+            textColor={theme.colors.onSurface}
             label={'Password Confirmation'}
           />
           <HelperText type="error" visible={errorCPassword()}>
@@ -129,10 +129,10 @@ function Register({navigation}: {navigation: NavigationProp<any>}) {
             onPress={() => {
               navigation.navigate('Login');
             }}>
-            <Text style={{color: theme.colors.surface}}>
+            <Text style={{color: theme.colors.onBackground}}>
               Already Has Account ?{' '}
             </Text>
-            <Text style={{color: theme.colors.surface, fontWeight: 'bold'}}>
+            <Text style={{color: theme.colors.onSurface, fontWeight: 'bold'}}>
               Login Here
             </Text>
           </Button>
