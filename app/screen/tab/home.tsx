@@ -16,6 +16,7 @@ function Home() {
         style={{
           color: theme.colors.onBackground,
           fontSize: 30,
+          fontWeight: 'bold',
         }}>
         Home
       </Text>

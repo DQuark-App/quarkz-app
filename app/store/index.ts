@@ -8,9 +8,12 @@ interface AppState {
   user: FirebaseAuthTypes.User | null;
   isWallet: boolean;
   isDarkMode: boolean;
+  isNotificationEnabled: boolean;
+  isNewNotification: boolean;
   walletToken: string | null;
   walletPubKey: string | null;
   setDarkMode: (isDarkMode: boolean) => void;
+  setPushNotification: (isNotificationEnabled: boolean) => void;
   setUser: (user: FirebaseAuthTypes.User | null) => void;
   signOut: () => void;
   setWalletToken: (token: string | null, pubKey: string | null) => void;
@@ -23,8 +26,12 @@ const useStore = create<AppState>()(
         user: null,
         isWallet: false,
         isDarkMode: false,
+        isNotificationEnabled: false,
+        isNewNotification: false,
         walletToken: null,
         walletPubKey: null,
+        setPushNotification: isNotificationEnabled =>
+          set(state => ({...state, isNotificationEnabled})),
         setDarkMode: isDarkMode => set(state => ({...state, isDarkMode})),
         setWalletToken: (newToken, walletPubKey) =>
           set(state => ({
