@@ -48,7 +48,6 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
     setError('');
     try {
       const [DQToken, pubKey, walletAuth] = await signMessage();
-
       store.setWalletToken(walletAuth, pubKey);
 
       const response = await axios.post(
@@ -154,19 +153,17 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
             <Text style={{color: theme.colors.surface}}>Login</Text>
           </Button>
           <Button
-            mode={'contained'}
-            style={{marginBottom: 8, backgroundColor: theme.colors.onSurface}}
+            mode={'outlined'}
+            style={{marginBottom: 8, backgroundColor: theme.colors.surface}}
             onPress={loginWithGoogle}
             icon={'google'}>
-            <Text style={{color: theme.colors.surface}}>Login With Google</Text>
+            <Text style={{color: theme.colors.primary}}>Login With Google</Text>
           </Button>
           <Button
+            style={{marginBottom: 8, backgroundColor: theme.colors.onSurface}}
             mode={'outlined'}
-            style={{marginBottom: 8}}
             onPress={loginUsingWallet}>
-            <Text style={{color: theme.colors.onBackground}}>
-              Connect Wallet
-            </Text>
+            <Text style={{color: theme.colors.surface}}>Connect Wallet</Text>
           </Button>
           <Text
             style={{
