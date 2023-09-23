@@ -7,10 +7,11 @@ import auth from '@react-native-firebase/auth';
 import {useState} from 'react';
 import {signMessage} from '../utils/wallet';
 // @ts-ignore
-import {API_URL, APP_URL} from '@env';
+import {API_URL} from '@env';
 import useStore from '../store';
 import {NavigationProp} from '@react-navigation/native';
 import axios, {AxiosError} from 'axios';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 function Login({navigation}: {navigation: NavigationProp<any>}) {
   const store = useStore();
   const theme = useTheme();
@@ -29,7 +30,20 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
       setError('Invalid Email or Password');
     }
   };
+  const loginWithGoogle = async () => {
+    setError('');
+    try {
+      await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+      const {idToken} = await GoogleSignin.signIn();
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
+      // Sign-in the user with the credential
+      return auth().signInWithCredential(googleCredential);
+    } catch (e) {
+      console.log(e);
+      setError('Failed to login');
+    }
+  };
   const loginUsingWallet = async () => {
     setError('');
     try {
@@ -138,6 +152,13 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
             style={{marginBottom: 8}}
             onPress={loginUsingEmail}>
             <Text style={{color: theme.colors.surface}}>Login</Text>
+          </Button>
+          <Button
+            mode={'contained'}
+            style={{marginBottom: 8, backgroundColor: theme.colors.onSurface}}
+            onPress={loginWithGoogle}
+            icon={'google'}>
+            <Text style={{color: theme.colors.surface}}>Login With Google</Text>
           </Button>
           <Button
             mode={'outlined'}
