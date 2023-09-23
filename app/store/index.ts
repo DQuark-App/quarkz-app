@@ -7,8 +7,10 @@ import {createJSONStorage} from 'zustand/middleware';
 interface AppState {
   user: FirebaseAuthTypes.User | null;
   isWallet: boolean;
+  isDarkMode: boolean;
   walletToken: string | null;
   walletPubKey: string | null;
+  setDarkMode: (isDarkMode: boolean) => void;
   setUser: (user: FirebaseAuthTypes.User | null) => void;
   signOut: () => void;
   setWalletToken: (token: string | null, pubKey: string | null) => void;
@@ -20,8 +22,10 @@ const useStore = create<AppState>()(
       set => ({
         user: null,
         isWallet: false,
+        isDarkMode: false,
         walletToken: null,
         walletPubKey: null,
+        setDarkMode: isDarkMode => set(state => ({...state, isDarkMode})),
         setWalletToken: (newToken, walletPubKey) =>
           set(state => ({
             ...state,
