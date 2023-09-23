@@ -7,11 +7,18 @@ function Home() {
     <View
       style={{
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        width: '100%',
+        height: '100%',
         backgroundColor: theme.colors.background,
+        padding: 15,
       }}>
-      <Text style={{color: theme.colors.onBackground}}>Home Screen</Text>
+      <Text
+        style={{
+          color: theme.colors.onBackground,
+          fontSize: 30,
+        }}>
+        Home
+      </Text>
     </View>
   );
 }
