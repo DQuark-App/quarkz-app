@@ -6,6 +6,7 @@ import {createJSONStorage} from 'zustand/middleware';
 
 interface AppState {
   user: FirebaseAuthTypes.User | null;
+  idToken: string | null;
   isWallet: boolean;
   isDarkMode: boolean;
   isNotificationEnabled: boolean;
@@ -15,6 +16,7 @@ interface AppState {
   setDarkMode: (isDarkMode: boolean) => void;
   setPushNotification: (isNotificationEnabled: boolean) => void;
   setUser: (user: FirebaseAuthTypes.User | null) => void;
+  setIdToken: (token: string | null) => void;
   signOut: () => void;
   setWalletToken: (token: string | null, pubKey: string | null) => void;
 }
@@ -24,12 +26,17 @@ const useStore = create<AppState>()(
     persist(
       set => ({
         user: null,
+        idToken: null,
         isWallet: false,
         isDarkMode: false,
         isNotificationEnabled: false,
         isNewNotification: false,
         walletToken: null,
         walletPubKey: null,
+        setIdToken: newToken => {
+          set(state => ({...state, idToken: newToken}));
+          AsyncStorage.setItem('idToken', newToken || '');
+        },
         setPushNotification: isNotificationEnabled =>
           set(state => ({...state, isNotificationEnabled})),
         setDarkMode: isDarkMode => set(state => ({...state, isDarkMode})),

@@ -11,10 +11,16 @@ export const FirebaseProvider = ({children}: {children: ReactNode}) => {
   const store = useStore();
 
   useEffect(() => {
-    auth().onAuthStateChanged((user: FirebaseAuthTypes.User | null) => {
-      setUser(user);
-      store.setUser(user);
-    });
+    auth().onAuthStateChanged(
+      async (newUser: FirebaseAuthTypes.User | null) => {
+        setUser(newUser);
+        store.setUser(newUser);
+        if (newUser) {
+          const token = await newUser.getIdToken();
+          store.setIdToken(token);
+        }
+      },
+    );
   }, []);
   return (
     <FirebaseAuthContext.Provider value={user}>
