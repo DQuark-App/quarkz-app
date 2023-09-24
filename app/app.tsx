@@ -14,10 +14,10 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={store.user != null ? 'Home' : 'Login'}
+        initialRouteName={store.user != null ? 'Main' : 'Login'}
         screenOptions={{navigationBarHidden: true, headerShown: false}}>
         {store.user != null ? (
-          <Stack.Screen name="Home" component={Main} />
+          <Stack.Screen name="Main" component={Main} />
         ) : (
           <>
             <Stack.Screen name="Login" component={Login} />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {BottomNavigation, useTheme} from 'react-native-paper';
@@ -6,11 +6,17 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CommonActions} from '@react-navigation/native';
 import Home from './tab/home';
 import Setting from './tab/setting';
-
+import {PermissionsAndroid} from 'react-native';
 const Tab = createBottomTabNavigator();
 
 export default function Main() {
   const theme = useTheme();
+
+  useEffect(() => {
+    PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+    );
+  }, []);
 
   return (
     <Tab.Navigator
