@@ -32,21 +32,46 @@ export default function ListFile({
   const realm = useRealm();
   const files = queryFile.filtered(`albumUid = "${route.params?.album.uid}"`);
 
-  const syncFile = async () => {
+  const syncFile = async (lastTimestamp = 0) => {
     setLoading(true);
     try {
-      const res = await DQService.instance.getFiles(
-        route.params?.album.uid || '',
-      );
-      const files = res.data.data as FileResponse[];
-      for (const file of files) {
-        realm.write(() => {
-          realm.create(File, {
-            cid: file.cid,
-            albumUid: file.album_uid,
-            createdAt: new Date(file.created_at),
-          });
-        });
+      let res;
+      if (lastTimestamp === 0) {
+        const lastFile = files.sorted('createdAt', true)[0]
+          ? (files.sorted('createdAt', true)[0] as File).createdAt.getTime()
+          : lastTimestamp;
+        res = await DQService.instance.getFiles(
+          route.params?.album.uid || '',
+          lastFile,
+        );
+      } else {
+        res = await DQService.instance.getFiles(
+          route.params?.album.uid || '',
+          lastTimestamp,
+        );
+      }
+      const fileRes = res.data.data as FileResponse[];
+      realm.write(() => {
+        for (const file of fileRes) {
+          // @ts-ignore
+          realm.create(
+            File,
+            {
+              cid: file.cid,
+              albumUid: file.album_uid,
+              createdAt: new Date(file.created_at),
+            },
+            'modified',
+          );
+        }
+      });
+      if (fileRes.length > 0) {
+        const nextTimestamp = new Date(
+          fileRes[fileRes.length - 1].created_at,
+        ).getTime();
+        if (nextTimestamp > lastTimestamp) {
+          syncFile(nextTimestamp);
+        }
       }
     } catch (e) {
       console.log(e);

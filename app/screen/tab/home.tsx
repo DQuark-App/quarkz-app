@@ -16,13 +16,22 @@ function Home({navigation}: {navigation: NavigationProp<any>}) {
   const [loading, setLoading] = useState(false);
   const folders = useQuery(Folder);
   const realm = useRealm();
-  const syncFolder = async () => {
+  const syncFolder = async (lastTimestamp = 0) => {
     setLoading(true);
     try {
-      const res = await DQService.instance.getFolder();
-      const folders = res.data.data as FolderResponse[];
+      let res;
+      if (lastTimestamp === 0) {
+        const lastFolder = folders.sorted('updatedAt', true)[0]
+          ? (folders.sorted('updatedAt', true)[0] as Folder).updatedAt.getTime()
+          : lastTimestamp;
+        res = await DQService.instance.getFolder(lastFolder);
+      } else {
+        res = await DQService.instance.getFolder(lastTimestamp);
+      }
+      const folderRes = res.data.data as FolderResponse[];
+      console.log(lastTimestamp);
       realm.write(() => {
-        for (const folder of folders) {
+        for (const folder of folderRes) {
           // @ts-ignore
           realm.create(
             Folder,
@@ -30,11 +39,22 @@ function Home({navigation}: {navigation: NavigationProp<any>}) {
               uid: folder.uid,
               name: folder.name,
               createdAt: new Date(folder.created_at),
+              updatedAt: new Date(folder.updated_at),
             },
             'modified',
           );
         }
       });
+
+      if (folderRes.length > 0) {
+        const nextTimestamp = new Date(
+          folderRes[folderRes.length - 1].created_at,
+        ).getTime();
+
+        if (nextTimestamp > lastTimestamp) {
+          syncFolder(nextTimestamp);
+        }
+      }
     } catch (e) {
       console.log(e);
     }

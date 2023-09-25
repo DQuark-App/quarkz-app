@@ -1,5 +1,4 @@
 import axios, {AxiosInstance} from 'axios';
-import auth from '@react-native-firebase/auth';
 // @ts-ignore
 import {API_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,13 +6,14 @@ import * as fs from 'react-native-fs';
 export type FolderResponse = {
   name: string;
   uid: string;
-  created_at: Date;
+  created_at: string;
+  updated_at: string;
 };
 
 export type FileResponse = {
   cid: string;
   album_uid: string;
-  created_at: Date;
+  created_at: string;
 };
 class DQService {
   private static _instance: DQService;
@@ -33,8 +33,10 @@ class DQService {
     });
   }
 
-  public getFolder() {
-    return DQService.API.get('/api/album');
+  public getFolder(lastestTimestamp: number = 0) {
+    return DQService.API.get(
+      '/api/album?lastest_timestamp=' + lastestTimestamp,
+    );
   }
 
   public createFolder(name: string) {
@@ -62,8 +64,13 @@ class DQService {
     return DQService.API.post('/api/metadata', data);
   }
 
-  public getFiles(albumUid: string) {
-    return DQService.API.get('/api/file?album_uid=' + albumUid);
+  public getFiles(albumUid: string, lastestTimestamp: number = 0) {
+    return DQService.API.get(
+      '/api/file?album_uid=' +
+        albumUid +
+        '&lastest_timestamp=' +
+        lastestTimestamp,
+    );
   }
   public static get instance() {
     if (!this._instance) {
