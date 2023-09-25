@@ -29,10 +29,12 @@ export default function ListFile({
   const [open, setOpen] = useState(false);
   const queryFile = useQuery(File);
   const realm = useRealm();
-  const files = queryFile.filtered(`albumUid = "${route.params?.albumUid}"`);
+  const files = queryFile.filtered(`albumUid = "${route.params?.album.uid}"`);
 
   const syncFile = async () => {
-    const res = await DQService.instance.getFiles(route.params?.albumUid || '');
+    const res = await DQService.instance.getFiles(
+      route.params?.album.uid || '',
+    );
     const files = res.data.data as FileResponse[];
     for (const file of files) {
       realm.write(() => {
@@ -114,7 +116,7 @@ export default function ListFile({
               fontSize: 30,
               fontWeight: 'bold',
             }}>
-            File List
+            {route.params?.album.name || 'Album'}
           </Text>
         </Row>
         <View style={{flex: 1, padding: 15}}>
@@ -123,7 +125,16 @@ export default function ListFile({
             data={files}
             keyExtractor={item => item.cid.toString()}
             renderItem={({item}) => {
-              return <FileItem file={item} />;
+              return (
+                <FileItem
+                  file={item}
+                  onPreview={() => {
+                    navigation.navigate('ImagePreview', {
+                      uri: 'https://nftstorage.link/ipfs/' + item.cid,
+                    });
+                  }}
+                />
+              );
             }}
           />
         </View>

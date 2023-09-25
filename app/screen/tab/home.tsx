@@ -93,7 +93,7 @@ function Home({navigation}: {navigation: NavigationProp<any>}) {
                 albumUid={item.uid}
                 name={item.name}
                 onClick={() => {
-                  navigation.navigate('File', {albumUid: item.uid});
+                  navigation.navigate('File', {album: item});
                 }}
               />
             );

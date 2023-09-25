@@ -56,7 +56,7 @@ export default function Main() {
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({color, size}) => {
-            return <Icon name="home" size={size} color={color} />;
+            return <Icon name="image-album" size={size} color={color} />;
           },
           tabBarActiveTintColor: theme.colors.onBackground,
         }}
