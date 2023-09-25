@@ -18,7 +18,9 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const loginUsingEmail = async () => {
+    setLoading(true);
     setError('');
     try {
       if (errorEmail() || errorPassword()) {
@@ -29,8 +31,10 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
       console.log(e);
       setError('Invalid Email or Password');
     }
+    setLoading(false);
   };
   const loginWithGoogle = async () => {
+    setLoading(true);
     setError('');
     try {
       await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
@@ -43,8 +47,10 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
       console.log(e);
       setError('Failed to login');
     }
+    setLoading(false);
   };
   const loginUsingWallet = async () => {
+    setLoading(true);
     setError('');
     try {
       const [DQToken, pubKey, walletAuth] = await signMessage();
@@ -72,6 +78,7 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
         serverError.error || error.message || 'Cannot connect to wallet';
       setError(errorMessage);
     }
+    setLoading(false);
   };
 
   const errorEmail = () => {
@@ -148,6 +155,7 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
           </HelperText>
           <Button
             mode={'contained'}
+            loading={loading}
             style={{marginBottom: 8}}
             onPress={loginUsingEmail}>
             <Text style={{color: theme.colors.surface}}>Login</Text>
@@ -156,12 +164,14 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
             mode={'outlined'}
             style={{marginBottom: 8, backgroundColor: theme.colors.surface}}
             onPress={loginWithGoogle}
+            loading={loading}
             icon={'google'}>
             <Text style={{color: theme.colors.primary}}>Login With Google</Text>
           </Button>
           <Button
             style={{marginBottom: 8, backgroundColor: theme.colors.onSurface}}
             mode={'outlined'}
+            loading={loading}
             onPress={loginUsingWallet}>
             <Text style={{color: theme.colors.surface}}>Connect Wallet</Text>
           </Button>

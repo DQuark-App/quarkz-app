@@ -6,8 +6,9 @@ import {useState} from 'react';
 type FileItemProps = {
   file: File;
   onPreview: () => void;
+  onMint: () => void;
 };
-export default function FileItem({file, onPreview}: FileItemProps) {
+export default function FileItem({file, onPreview, onMint}: FileItemProps) {
   const [visible, setVisible] = useState(false);
   return (
     <View style={{flex: 0.5}}>
@@ -38,7 +39,10 @@ export default function FileItem({file, onPreview}: FileItemProps) {
               leadingIcon={'magnify'}
             />
             <Menu.Item
-              onPress={() => {}}
+              onPress={() => {
+                setVisible(false);
+                onMint();
+              }}
               title="Minting"
               leadingIcon={'palette-swatch-variant'}
             />

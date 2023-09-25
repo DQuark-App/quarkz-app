@@ -3,6 +3,7 @@ import ListFile from '../listfile';
 import React from 'react';
 import Home from './home';
 import ImagePreview from '../imagepreview';
+import Minting from '../minting';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,6 +15,7 @@ export default function HomeWrap() {
       <Stack.Screen name="HomeDetail" component={Home} />
       <Stack.Screen name="File" component={ListFile} />
       <Stack.Screen name="ImagePreview" component={ImagePreview} />
+      <Stack.Screen name="Minting" component={Minting} />
     </Stack.Navigator>
   );
 }

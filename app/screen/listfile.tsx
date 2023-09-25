@@ -128,6 +128,11 @@ export default function ListFile({
               return (
                 <FileItem
                   file={item}
+                  onMint={() => {
+                    navigation.navigate('Minting', {
+                      uri: 'https://nftstorage.link/ipfs/' + item.cid,
+                    });
+                  }}
                   onPreview={() => {
                     navigation.navigate('ImagePreview', {
                       uri: 'https://nftstorage.link/ipfs/' + item.cid,

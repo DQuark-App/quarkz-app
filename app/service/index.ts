@@ -58,6 +58,10 @@ class DQService {
     });
   }
 
+  public async uploadMetadata(data: object) {
+    return DQService.API.post('/api/metadata', data);
+  }
+
   public getFiles(albumUid: string) {
     return DQService.API.get('/api/file?album_uid=' + albumUid);
   }

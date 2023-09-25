@@ -1,12 +1,10 @@
 /**
  * @format
  */
-
+import 'react-native-url-polyfill/auto';
 import {AppRegistry} from 'react-native';
-import App from './app/app';
 import {name as appName} from './app.json';
 import 'react-native-get-random-values';
-import 'react-native-url-polyfill/auto';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import messaging, {
   FirebaseMessagingTypes,
@@ -14,7 +12,7 @@ import messaging, {
 import notifee from '@notifee/react-native';
 import {Buffer} from 'buffer';
 global.Buffer = Buffer;
-
+import App from './app/app';
 async function onMessageReceived(
   message: FirebaseMessagingTypes.RemoteMessage,
 ) {
