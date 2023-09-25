@@ -70,6 +70,12 @@ export default function ListFile({
           mediaType: 'photo',
           cropping: true,
         });
+
+        if (image.size > 3000000) {
+          Alert.alert('Error', 'File size cannot be more than 3 MB');
+          return;
+        }
+
         const result = await DQService.instance.uploadFile(
           route.params?.albumUid || '',
           image.path,
