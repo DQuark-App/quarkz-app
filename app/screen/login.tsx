@@ -156,6 +156,7 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
           <Button
             mode={'contained'}
             loading={loading}
+            disabled={errorEmail() || errorPassword()}
             style={{marginBottom: 8}}
             onPress={loginUsingEmail}>
             <Text style={{color: theme.colors.surface}}>Login</Text>

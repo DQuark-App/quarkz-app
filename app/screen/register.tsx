@@ -119,6 +119,7 @@ function Register({navigation}: {navigation: NavigationProp<any>}) {
             * Password Confirmation is Empty!
           </HelperText>
           <Button
+            disabled={errorEmail() || errorPassword() || errorCPassword()}
             mode={'contained'}
             style={{marginBottom: 8}}
             onPress={registerUsingEmail}>

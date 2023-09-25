@@ -1,4 +1,10 @@
-import {Button, IconButton, TextInput, useTheme} from 'react-native-paper';
+import {
+  Button,
+  HelperText,
+  IconButton,
+  TextInput,
+  useTheme,
+} from 'react-native-paper';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {Alert, Image, Text, ToastAndroid, View} from 'react-native';
 import {Column, Row} from '../components/grid';
@@ -54,6 +60,14 @@ export default function Minting({
     setLoading(false);
   };
 
+  const erroName = () => {
+    return !name || name.length < 3;
+  };
+
+  const erroDescription = () => {
+    return !description || description.length < 10;
+  };
+
   return (
     <>
       <View
@@ -100,6 +114,9 @@ export default function Minting({
               textColor={theme.colors.onSurface}
               label={'Name'}
             />
+            <HelperText type="error" visible={erroName()}>
+              * Name must be at least 3 characters
+            </HelperText>
             <TextInput
               theme={theme}
               mode={'outlined'}
@@ -115,7 +132,14 @@ export default function Minting({
               textColor={theme.colors.onSurface}
               label={'Description'}
             />
-            <Button mode={'contained'} onPress={onmintNFT} loading={loading}>
+            <HelperText type="error" visible={erroDescription()}>
+              * Description must be at least 10 characters
+            </HelperText>
+            <Button
+              mode={'contained'}
+              onPress={onmintNFT}
+              disabled={erroName() || erroDescription()}
+              loading={loading}>
               <Text>Mint NFT</Text>
             </Button>
           </Column>
