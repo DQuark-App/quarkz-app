@@ -17,16 +17,14 @@ export class Folder extends Realm.Object<Folder> {
 
 export class File extends Realm.Object<File> {
   public cid!: string;
-  public user_id!: string;
-  public album_uid!: string;
+  public albumUid!: string;
   public createdAt!: Date;
   static schema = {
     name: 'File',
     primaryKey: 'cid',
     properties: {
       cid: 'string',
-      user_id: 'string',
-      album_uid: 'string',
+      albumUid: 'string',
       createdAt: 'date',
     },
   };

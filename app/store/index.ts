@@ -35,7 +35,6 @@ const useStore = create<AppState>()(
         walletPubKey: null,
         setIdToken: newToken => {
           set(state => ({...state, idToken: newToken}));
-          AsyncStorage.setItem('idToken', newToken || '');
         },
         setPushNotification: isNotificationEnabled =>
           set(state => ({...state, isNotificationEnabled})),

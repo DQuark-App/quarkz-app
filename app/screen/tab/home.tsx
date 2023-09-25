@@ -1,12 +1,15 @@
 import {Alert, FlatList, Text, ToastAndroid, View} from 'react-native';
-import {FAB, List, Portal, useTheme} from 'react-native-paper';
+import {FAB, Portal, useTheme} from 'react-native-paper';
 import {useEffect, useState} from 'react';
 import {useQuery, useRealm} from '../../providers';
 import {Folder} from '../../schema';
 import DQService, {FolderResponse} from '../../service';
-import CreateAlbumModal from '../../components/albummodal';
+import Album from '../../components/album';
+import AlbumModal from '../../components/albummodal';
+import {NavigationProp} from '@react-navigation/native';
+import {AxiosError} from 'axios';
 
-function Home() {
+function Home({navigation}: {navigation: NavigationProp<any>}) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [isCreateAlbumModalVisible, setIsCreateAlbumModalVisible] =
@@ -14,32 +17,40 @@ function Home() {
   const folders = useQuery(Folder);
   const realm = useRealm();
   const syncFolder = async () => {
-    const res = await DQService.instance.getFolder();
-    const folders = res.data.data as FolderResponse[];
-    realm.write(() => {
-      for (const folder of folders) {
-        // @ts-ignore
-        realm.create(
-          Folder,
-          {
-            uid: folder.uid,
-            name: folder.name,
-            createdAt: new Date(folder.created_at),
-          },
-          'modified',
-        );
-      }
-    });
+    try {
+      const res = await DQService.instance.getFolder();
+      const folders = res.data.data as FolderResponse[];
+      realm.write(() => {
+        for (const folder of folders) {
+          // @ts-ignore
+          realm.create(
+            Folder,
+            {
+              uid: folder.uid,
+              name: folder.name,
+              createdAt: new Date(folder.created_at),
+            },
+            'modified',
+          );
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const createAlbum = async (name: string) => {
-    setIsCreateAlbumModalVisible(false);
-    const res = await DQService.instance.createFolder(name);
-    if (res.data.status === 'success') {
-      ToastAndroid.show('Album created', ToastAndroid.SHORT);
-      syncFolder();
-    } else {
-      Alert.alert('Error', res.data.message);
+    try {
+      setIsCreateAlbumModalVisible(false);
+      const res = await DQService.instance.createFolder(name);
+      if (res.data.status === 'success') {
+        ToastAndroid.show('Album created', ToastAndroid.SHORT);
+        syncFolder();
+      } else {
+        Alert.alert('Error', res.data.message);
+      }
+    } catch (e) {
+      Alert.alert('Error', 'Failed to create album');
     }
   };
 
@@ -49,7 +60,8 @@ function Home() {
   return (
     <>
       <Portal>
-        <CreateAlbumModal
+        <AlbumModal
+          previousText={null}
           isVisible={isCreateAlbumModalVisible}
           onOk={createAlbum}
           onCancel={() => setIsCreateAlbumModalVisible(false)}
@@ -69,16 +81,20 @@ function Home() {
             fontSize: 30,
             fontWeight: 'bold',
           }}>
-          Home
+          Library
         </Text>
         <FlatList
+          numColumns={2}
           data={folders}
           keyExtractor={item => item.uid.toString()}
           renderItem={({item}) => {
             return (
-              <List.Item
-                title={item.name}
-                left={() => <List.Icon icon={'folder'} />}
+              <Album
+                albumUid={item.uid}
+                name={item.name}
+                onClick={() => {
+                  navigation.navigate('File', {albumUid: item.uid});
+                }}
               />
             );
           }}
@@ -89,11 +105,6 @@ function Home() {
         icon={open ? 'close' : 'plus'}
         visible={true}
         actions={[
-          {
-            icon: 'file',
-            label: 'Upload File',
-            onPress: () => console.log('Pressed upload file'),
-          },
           {
             icon: 'folder',
             label: 'Create Album',

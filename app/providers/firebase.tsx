@@ -1,6 +1,7 @@
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {createContext, ReactNode, useEffect, useState} from 'react';
 import useStore from '../store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type DQuarkUser = FirebaseAuthTypes.User | null;
 
@@ -13,12 +14,13 @@ export const FirebaseProvider = ({children}: {children: ReactNode}) => {
   useEffect(() => {
     auth().onAuthStateChanged(
       async (newUser: FirebaseAuthTypes.User | null) => {
-        setUser(newUser);
-        store.setUser(newUser);
         if (newUser) {
           const token = await newUser.getIdToken();
+          await AsyncStorage.setItem('token', token);
           store.setIdToken(token);
         }
+        setUser(newUser);
+        store.setUser(newUser);
       },
     );
   }, []);

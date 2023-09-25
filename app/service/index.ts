@@ -3,10 +3,16 @@ import auth from '@react-native-firebase/auth';
 // @ts-ignore
 import {API_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import * as fs from 'react-native-fs';
 export type FolderResponse = {
   name: string;
   uid: string;
+  created_at: Date;
+};
+
+export type FileResponse = {
+  cid: string;
+  album_uid: string;
   created_at: Date;
 };
 class DQService {
@@ -18,10 +24,11 @@ class DQService {
     });
 
     DQService.API.interceptors.request.use(async config => {
-      if (!auth().currentUser) {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
         return config;
       }
-      config.headers.Authorization = await AsyncStorage.getItem('idToken');
+      config.headers.Authorization = token;
       return config;
     });
   }
@@ -34,8 +41,25 @@ class DQService {
     return DQService.API.put('/api/album', {name});
   }
 
-  public getFiles() {
-    return DQService.API.get('/api/file');
+  public editFolder(uid: string, name: string) {
+    return DQService.API.post('/api/album', {uid, name});
+  }
+
+  public deleteFolder(uid: string) {
+    return DQService.API.delete('/api/album?uid=' + uid);
+  }
+
+  public async uploadFile(albumUid: string, image: string) {
+    const data = await fs.readFile(image, 'base64');
+
+    return DQService.API.post('/api/file', {
+      data,
+      album_uid: albumUid,
+    });
+  }
+
+  public getFiles(albumUid: string) {
+    return DQService.API.get('/api/file?album_uid=' + albumUid);
   }
   public static get instance() {
     if (!this._instance) {
