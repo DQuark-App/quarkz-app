@@ -1,4 +1,4 @@
-import {FAB, IconButton, useTheme} from 'react-native-paper';
+import {ActivityIndicator, FAB, IconButton, useTheme} from 'react-native-paper';
 import {Row} from '../components/grid';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
@@ -27,24 +27,31 @@ export default function ListFile({
 }) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const queryFile = useQuery(File);
   const realm = useRealm();
   const files = queryFile.filtered(`albumUid = "${route.params?.album.uid}"`);
 
   const syncFile = async () => {
-    const res = await DQService.instance.getFiles(
-      route.params?.album.uid || '',
-    );
-    const files = res.data.data as FileResponse[];
-    for (const file of files) {
-      realm.write(() => {
-        realm.create(File, {
-          cid: file.cid,
-          albumUid: file.album_uid,
-          createdAt: new Date(file.created_at),
+    setLoading(true);
+    try {
+      const res = await DQService.instance.getFiles(
+        route.params?.album.uid || '',
+      );
+      const files = res.data.data as FileResponse[];
+      for (const file of files) {
+        realm.write(() => {
+          realm.create(File, {
+            cid: file.cid,
+            albumUid: file.album_uid,
+            createdAt: new Date(file.created_at),
+          });
         });
-      });
+      }
+    } catch (e) {
+      console.log(e);
     }
+    setLoading(false);
   };
   const pickImage = async () => {
     const grantedCamera = await PermissionsAndroid.check(
@@ -119,6 +126,7 @@ export default function ListFile({
             {route.params?.album.name || 'Album'}
           </Text>
         </Row>
+        {loading && <ActivityIndicator style={{margin: 10}} size={'small'} />}
         <View style={{flex: 1, padding: 15}}>
           <FlatList
             numColumns={2}

@@ -13,6 +13,8 @@ interface AppState {
   isNewNotification: boolean;
   walletToken: string | null;
   walletPubKey: string | null;
+  network: string;
+  setNetwork: (network: string) => void;
   setDarkMode: (isDarkMode: boolean) => void;
   setPushNotification: (isNotificationEnabled: boolean) => void;
   setUser: (user: FirebaseAuthTypes.User | null) => void;
@@ -31,8 +33,11 @@ const useStore = create<AppState>()(
         isDarkMode: false,
         isNotificationEnabled: false,
         isNewNotification: false,
+        network: 'mainnet',
         walletToken: null,
         walletPubKey: null,
+        setNetwork: newNetwork =>
+          set(state => ({...state, network: newNetwork})),
         setIdToken: newToken => {
           set(state => ({...state, idToken: newToken}));
         },

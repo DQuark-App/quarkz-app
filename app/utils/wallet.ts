@@ -13,13 +13,13 @@ import {
   MetaplexPlugin,
 } from '@metaplex-foundation/js';
 import {Connection, PublicKey, Transaction} from '@solana/web3.js';
-export const signMessage = async () => {
+export const signMessage = async (network: string = 'devnet') => {
   return await transact(async wallet => {
     const message = APP_MESSAGE.toString('utf-8') || '';
     const messageBuffer = new TextEncoder().encode(message);
     // Authorize the wallet session.
     const authorizationResult = await wallet.authorize({
-      cluster: 'devnet',
+      cluster: network === 'devnet' ? 'devnet' : 'mainnet-beta',
       identity: APP_IDENTITY,
     });
 
@@ -48,13 +48,15 @@ export const mintNFT = async (
   name: string,
   walletAuth: string | null,
   walletPubKey: string | null,
+  network: string = 'devnet',
 ) => {
+  const cluster = network === 'devnet' ? 'devnet' : 'mainnet-beta';
   const mwaIdentitySigner: IdentitySigner = {
     publicKey: new PublicKey(walletPubKey || ''),
     signMessage: async (message: Uint8Array): Promise<Uint8Array> => {
       return await transact(async (wallet: Web3MobileWallet) => {
         await wallet.authorize({
-          cluster: 'devnet',
+          cluster,
           identity: APP_IDENTITY,
         });
 
@@ -69,7 +71,7 @@ export const mintNFT = async (
     signTransaction: async (transaction: Transaction): Promise<Transaction> => {
       return await transact(async (wallet: Web3MobileWallet) => {
         await wallet.authorize({
-          cluster: 'devnet',
+          cluster,
           identity: APP_IDENTITY,
         });
 
@@ -85,7 +87,7 @@ export const mintNFT = async (
     ): Promise<Transaction[]> => {
       return await transact(async (wallet: Web3MobileWallet) => {
         await wallet.authorize({
-          cluster: 'devnet',
+          cluster,
           identity: APP_IDENTITY,
         });
 
@@ -105,9 +107,9 @@ export const mintNFT = async (
     },
   });
 
-  const METAPLEX = Metaplex.make(
-    new Connection('https://api.devnet.solana.com'),
-  ).use(mobileWalletAdapterIdentity(mwaIdentitySigner));
+  const METAPLEX = MetaPlexInstance(network).use(
+    mobileWalletAdapterIdentity(mwaIdentitySigner),
+  );
 
   const {nft, response} = await METAPLEX.nfts().create(
     {
@@ -127,4 +129,24 @@ export const mintNFT = async (
   );
 
   return {nft, response};
+};
+
+export const MetaPlexInstance = (network: string = 'devnet') => {
+  const rpc =
+    network === 'devnet'
+      ? 'https://api.devnet.solana.com'
+      : 'https://api.mainnet-beta.solana.com';
+
+  return Metaplex.make(new Connection(rpc));
+};
+
+export const getByCreator = async (
+  network: string = 'devnet',
+  creator: string,
+) => {
+  const metaplex = MetaPlexInstance(network);
+
+  return await metaplex.nfts().findAllByCreator({
+    creator: new PublicKey(creator),
+  });
 };

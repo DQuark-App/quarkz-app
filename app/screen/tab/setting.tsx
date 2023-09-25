@@ -7,6 +7,7 @@ import useStore from '../../store';
 function Setting() {
   const theme = useTheme();
   const store = useStore();
+
   return (
     <ScrollView
       style={{
@@ -85,6 +86,21 @@ function Setting() {
                     value={store.isDarkMode}
                     {...props}
                     onValueChange={value => store.setDarkMode(value)}
+                  />
+                )}
+              />
+              <List.Item
+                style={{marginTop: 20}}
+                titleStyle={{color: theme.colors.onSurface, fontSize: 18}}
+                title={'Network (Mainnet/Devnet)'}
+                left={props => <List.Icon {...props} icon="web" />}
+                right={props => (
+                  <Switch
+                    value={store.network === 'mainnet'}
+                    {...props}
+                    onValueChange={value =>
+                      store.setNetwork(value ? 'mainnet' : 'devnet')
+                    }
                   />
                 )}
               />

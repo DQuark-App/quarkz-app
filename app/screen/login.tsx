@@ -53,7 +53,7 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
     setLoading(true);
     setError('');
     try {
-      const [DQToken, pubKey, walletAuth] = await signMessage();
+      const [DQToken, pubKey, walletAuth] = await signMessage(store.network);
       store.setWalletToken(walletAuth, pubKey);
 
       const response = await axios.post(

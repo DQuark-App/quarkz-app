@@ -48,6 +48,7 @@ export default function Minting({
         name,
         store.walletToken,
         store.walletPubKey,
+        store.network,
       );
 
       ToastAndroid.show('NFT Minted', ToastAndroid.SHORT);

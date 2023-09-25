@@ -1,5 +1,5 @@
 import {Alert, FlatList, Text, ToastAndroid, View} from 'react-native';
-import {FAB, Portal, useTheme} from 'react-native-paper';
+import {ActivityIndicator, FAB, Portal, useTheme} from 'react-native-paper';
 import {useEffect, useState} from 'react';
 import {useQuery, useRealm} from '../../providers';
 import {Folder} from '../../schema';
@@ -7,16 +7,17 @@ import DQService, {FolderResponse} from '../../service';
 import Album from '../../components/album';
 import AlbumModal from '../../components/albummodal';
 import {NavigationProp} from '@react-navigation/native';
-import {AxiosError} from 'axios';
 
 function Home({navigation}: {navigation: NavigationProp<any>}) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [isCreateAlbumModalVisible, setIsCreateAlbumModalVisible] =
     useState(false);
+  const [loading, setLoading] = useState(false);
   const folders = useQuery(Folder);
   const realm = useRealm();
   const syncFolder = async () => {
+    setLoading(true);
     try {
       const res = await DQService.instance.getFolder();
       const folders = res.data.data as FolderResponse[];
@@ -37,6 +38,7 @@ function Home({navigation}: {navigation: NavigationProp<any>}) {
     } catch (e) {
       console.log(e);
     }
+    setLoading(false);
   };
 
   const createAlbum = async (name: string) => {
@@ -73,19 +75,21 @@ function Home({navigation}: {navigation: NavigationProp<any>}) {
           width: '100%',
           height: '100%',
           backgroundColor: theme.colors.background,
-          padding: 15,
         }}>
         <Text
           style={{
             color: theme.colors.onBackground,
             fontSize: 30,
             fontWeight: 'bold',
+            padding: 15,
           }}>
           Library
         </Text>
+        {loading && <ActivityIndicator style={{margin: 10}} size={'small'} />}
         <FlatList
           numColumns={2}
           data={folders}
+          scrollEnabled={true}
           keyExtractor={item => item.uid.toString()}
           renderItem={({item}) => {
             return (
@@ -93,7 +97,12 @@ function Home({navigation}: {navigation: NavigationProp<any>}) {
                 albumUid={item.uid}
                 name={item.name}
                 onClick={() => {
-                  navigation.navigate('File', {album: item});
+                  navigation.navigate('File', {
+                    album: {
+                      uid: item.uid,
+                      name: item.name,
+                    },
+                  });
                 }}
               />
             );
