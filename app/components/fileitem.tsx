@@ -13,7 +13,7 @@ type FileItemProps = {
 export default function FileItem({file, onPreview, onMint}: FileItemProps) {
   const [visible, setVisible] = useState(false);
   return (
-    <View style={{flex: 0.5}}>
+    <View style={{flex: 0.5, padding: 5}}>
       <Card
         mode={'outlined'}
         onPress={() => {

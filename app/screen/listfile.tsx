@@ -140,7 +140,6 @@ export default function ListFile({
           height: '100%',
           backgroundColor: theme.colors.background,
           paddingTop: 15,
-          paddingRight: 15,
         }}>
         <Row alignItems={'center'} justifyContent={'flex-start'}>
           <IconButton
