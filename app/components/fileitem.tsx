@@ -2,6 +2,8 @@ import {Card, IconButton, Menu} from 'react-native-paper';
 import {File} from '../schema';
 import {View} from 'react-native';
 import {useState} from 'react';
+// @ts-ignore
+import {IPFS_GATEWAY} from '@env';
 
 type FileItemProps = {
   file: File;
@@ -17,9 +19,7 @@ export default function FileItem({file, onPreview, onMint}: FileItemProps) {
         onPress={() => {
           onPreview();
         }}>
-        <Card.Cover
-          source={{uri: 'https://nftstorage.link/ipfs/' + file.cid}}
-        />
+        <Card.Cover source={{uri: IPFS_GATEWAY + file.cid}} />
         <Card.Actions style={{height: 30}}>
           <Menu
             visible={visible}

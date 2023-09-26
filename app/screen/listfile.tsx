@@ -17,6 +17,8 @@ import {AxiosError} from 'axios';
 import {useQuery, useRealm} from '../providers';
 import {File} from '../schema';
 import FileItem from '../components/fileitem';
+// @ts-ignore
+import {IPFS_GATEWAY} from '@env';
 
 export default function ListFile({
   route,
@@ -169,12 +171,12 @@ export default function ListFile({
                   file={item}
                   onMint={() => {
                     navigation.navigate('Minting', {
-                      uri: 'https://nftstorage.link/ipfs/' + item.cid,
+                      uri: IPFS_GATEWAY + item.cid,
                     });
                   }}
                   onPreview={() => {
                     navigation.navigate('ImagePreview', {
-                      uri: 'https://nftstorage.link/ipfs/' + item.cid,
+                      uri: IPFS_GATEWAY + item.cid,
                     });
                   }}
                 />

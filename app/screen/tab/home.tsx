@@ -29,7 +29,6 @@ function Home({navigation}: {navigation: NavigationProp<any>}) {
         res = await DQService.instance.getFolder(lastTimestamp);
       }
       const folderRes = res.data.data as FolderResponse[];
-      console.log(lastTimestamp);
       realm.write(() => {
         for (const folder of folderRes) {
           // @ts-ignore
