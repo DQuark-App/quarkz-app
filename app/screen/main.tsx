@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CommonActions} from '@react-navigation/native';
 import Setting from './tab/setting';
 import LibraryWrap from './tab/librarywrap';
-import Generate from './tab/generate';
+import GenerateWrap from './tab/generate';
 const Tab = createBottomTabNavigator();
 
 export default function Main() {
@@ -64,7 +64,7 @@ export default function Main() {
       )}>
       <Tab.Screen
         name="Generate"
-        component={Generate}
+        component={GenerateWrap}
         options={{
           tabBarLabel: 'Create',
           tabBarIcon: ({color, size}) => {

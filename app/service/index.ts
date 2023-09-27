@@ -64,6 +64,10 @@ class DQService {
     return DQService.API.post('/api/metadata', data);
   }
 
+  public async createArt(text: string) {
+    return DQService.API.post('/api/art', {text});
+  }
+
   public getFiles(albumUid: string, lastestTimestamp: number = 0) {
     return DQService.API.get(
       '/api/file?album_uid=' +

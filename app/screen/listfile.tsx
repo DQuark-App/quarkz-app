@@ -1,4 +1,4 @@
-import {ActivityIndicator, FAB, IconButton, useTheme} from 'react-native-paper';
+import {FAB, IconButton, useTheme} from 'react-native-paper';
 import {Row} from '../components/grid';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
@@ -161,7 +161,7 @@ export default function ListFile({
             {route.params?.album.name || 'Album'}
           </Text>
         </Row>
-        <View style={{flex: 1, padding: 15}}>
+        <View style={{flex: 1}}>
           <FlatList
             numColumns={2}
             data={files}

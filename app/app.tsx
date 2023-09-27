@@ -7,6 +7,8 @@ import Login from './screen/login';
 import useStore from './store';
 import Register from './screen/register';
 import {PermissionsAndroid, Platform} from 'react-native';
+import ImagePreview from './screen/imagepreview';
+import Minting from './screen/minting';
 
 const Stack = createNativeStackNavigator();
 //Use {navigation} : {navigation: NavigationProp} on pros to get navigation prop
@@ -45,6 +47,8 @@ function App() {
         {store.user != null ? (
           <>
             <Stack.Screen name="Main" component={Main} />
+            <Stack.Screen name="ImagePreview" component={ImagePreview} />
+            <Stack.Screen name="Minting" component={Minting} />
           </>
         ) : (
           <>

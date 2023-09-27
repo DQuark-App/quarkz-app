@@ -34,7 +34,11 @@ export default function ImagePreview({
         <View style={{flex: 1}}>
           <Image
             source={{uri: route.params?.uri}}
-            style={{width: '100%', height: '100%', resizeMode: 'center'}}
+            style={{
+              width: '100%',
+              height: '100%',
+              resizeMode: 'center',
+            }}
           />
         </View>
       </View>
