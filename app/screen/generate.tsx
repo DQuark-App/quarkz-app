@@ -198,6 +198,7 @@ export default function Generate({
               style={{marginRight: 10, marginLeft: 10, marginTop: 10}}
               data={models}
               numColumns={3}
+              scrollEnabled={false}
               keyExtractor={data => data.name}
               renderItem={({item}) => {
                 return (
