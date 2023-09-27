@@ -131,7 +131,7 @@ export default function Generate({
                   marginRight: 10,
                   marginLeft: 10,
                   marginTop: 10,
-                  color: theme.colors.primary,
+                  color: theme.colors.onBackground,
                   fontSize: 16,
                   fontWeight: 'bold',
                 }}>
@@ -156,7 +156,7 @@ export default function Generate({
                 marginRight: 10,
                 marginLeft: 10,
                 marginTop: 10,
-                color: theme.colors.primary,
+                color: theme.colors.onBackground,
                 fontSize: 16,
                 fontWeight: 'bold',
               }}>
@@ -188,7 +188,7 @@ export default function Generate({
                 marginRight: 10,
                 marginLeft: 10,
                 marginTop: 10,
-                color: theme.colors.primary,
+                color: theme.colors.onBackground,
                 fontSize: 16,
                 fontWeight: 'bold',
               }}>
