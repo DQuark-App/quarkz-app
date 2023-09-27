@@ -4,6 +4,7 @@ export class Folder extends Realm.Object<Folder> {
   public name!: string;
   public createdAt!: Date;
   public uid!: string;
+  public userId!: string;
   public updatedAt!: Date;
   static schema = {
     name: 'Folder',
@@ -13,6 +14,7 @@ export class Folder extends Realm.Object<Folder> {
       uid: 'string',
       createdAt: 'date',
       updatedAt: 'date',
+      userId: 'string',
     },
   };
 }

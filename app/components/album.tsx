@@ -60,7 +60,7 @@ export default function Album({name, albumUid, onClick}: AlbumProps) {
         <Card.Content>
           <Icon
             name={'folder'}
-            color={theme.colors.onSurface}
+            color={theme.colors.primary}
             size={64}
             style={{alignSelf: 'center', marginBottom: 5}}
           />
@@ -68,7 +68,7 @@ export default function Album({name, albumUid, onClick}: AlbumProps) {
             {name}
           </Text>
         </Card.Content>
-        <Card.Actions>
+        <Card.Actions style={{height: 32}}>
           <Menu
             visible={visible}
             onDismiss={() => setVisible(false)}

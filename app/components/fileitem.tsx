@@ -1,6 +1,6 @@
 import {Card, IconButton, Menu} from 'react-native-paper';
 import {File} from '../schema';
-import {View} from 'react-native';
+import {Share, View} from 'react-native';
 import {useState} from 'react';
 // @ts-ignore
 import {IPFS_GATEWAY} from '@env';
@@ -37,6 +37,14 @@ export default function FileItem({file, onPreview, onMint}: FileItemProps) {
               }}
               title="Preview"
               leadingIcon={'magnify'}
+            />
+            <Menu.Item
+              onPress={() => {
+                Share.share({message: IPFS_GATEWAY + file.cid});
+                setVisible(false);
+              }}
+              title="Share link"
+              leadingIcon={'link'}
             />
             <Menu.Item
               onPress={() => {

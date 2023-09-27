@@ -5,7 +5,8 @@ import {BottomNavigation, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CommonActions} from '@react-navigation/native';
 import Setting from './tab/setting';
-import HomeWrap from './tab/homewrap';
+import LibraryWrap from './tab/librarywrap';
+import Generate from './tab/generate';
 const Tab = createBottomTabNavigator();
 
 export default function Main() {
@@ -23,7 +24,7 @@ export default function Main() {
           inactiveColor={theme.colors.onSurface}
           navigationState={state}
           safeAreaInsets={insets}
-          labeled={false}
+          labeled={true}
           onTabPress={({route, preventDefault}) => {
             const event = navigation.emit({
               type: 'tabPress',
@@ -48,15 +49,37 @@ export default function Main() {
 
             return null;
           }}
+          getLabelText={({route}) => {
+            const {options} = descriptors[route.key];
+            const label =
+              options.tabBarLabel !== undefined
+                ? options.tabBarLabel.toString()
+                : options.title !== undefined
+                ? options.title.toString()
+                : '';
+
+            return label;
+          }}
         />
       )}>
       <Tab.Screen
-        name="Home"
-        component={HomeWrap}
+        name="Generate"
+        component={Generate}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Create',
           tabBarIcon: ({color, size}) => {
-            return <Icon name="image-album" size={size} color={color} />;
+            return <Icon name="palette" size={size} color={color} />;
+          },
+          tabBarActiveTintColor: theme.colors.onBackground,
+        }}
+      />
+      <Tab.Screen
+        name="Library"
+        component={LibraryWrap}
+        options={{
+          tabBarLabel: 'Library',
+          tabBarIcon: ({color, size}) => {
+            return <Icon name="folder-home" size={size} color={color} />;
           },
           tabBarActiveTintColor: theme.colors.onBackground,
         }}
@@ -67,7 +90,7 @@ export default function Main() {
         options={{
           tabBarLabel: 'Settings',
           tabBarIcon: ({color, size}) => {
-            return <Icon name="cog" size={size} color={color} />;
+            return <Icon name="account" size={size} color={color} />;
           },
           tabBarActiveTintColor: theme.colors.onBackground,
         }}

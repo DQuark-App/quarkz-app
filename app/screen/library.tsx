@@ -1,23 +1,23 @@
 import {Alert, FlatList, Text, ToastAndroid, View} from 'react-native';
 import {ActivityIndicator, FAB, Portal, useTheme} from 'react-native-paper';
 import {useEffect, useState} from 'react';
-import {useQuery, useRealm} from '../../providers';
-import {Folder} from '../../schema';
-import DQService, {FolderResponse} from '../../service';
-import Album from '../../components/album';
-import AlbumModal from '../../components/albummodal';
+import {useQuery, useRealm} from '../providers';
+import {Folder} from '../schema';
+import DQService, {FolderResponse} from '../service';
+import Album from '../components/album';
+import AlbumModal from '../components/albummodal';
 import {NavigationProp} from '@react-navigation/native';
+import useStore from '../store';
 
-function Home({navigation}: {navigation: NavigationProp<any>}) {
+function Library({navigation}: {navigation: NavigationProp<any>}) {
+  const store = useStore();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [isCreateAlbumModalVisible, setIsCreateAlbumModalVisible] =
     useState(false);
-  const [loading, setLoading] = useState(false);
-  const folders = useQuery(Folder);
+  const folders = useQuery(Folder).filtered(`userId = "${store.user?.uid}"`);
   const realm = useRealm();
   const syncFolder = async (lastTimestamp = 0) => {
-    setLoading(true);
     try {
       let res;
       if (lastTimestamp === 0) {
@@ -39,6 +39,7 @@ function Home({navigation}: {navigation: NavigationProp<any>}) {
               name: folder.name,
               createdAt: new Date(folder.created_at),
               updatedAt: new Date(folder.updated_at),
+              userId: store.user?.uid || '',
             },
             'modified',
           );
@@ -57,7 +58,6 @@ function Home({navigation}: {navigation: NavigationProp<any>}) {
     } catch (e) {
       console.log(e);
     }
-    setLoading(false);
   };
 
   const createAlbum = async (name: string) => {
@@ -104,7 +104,6 @@ function Home({navigation}: {navigation: NavigationProp<any>}) {
           }}>
           Library
         </Text>
-        {loading && <ActivityIndicator style={{margin: 10}} size={'small'} />}
         <FlatList
           numColumns={2}
           data={folders}
@@ -150,4 +149,4 @@ function Home({navigation}: {navigation: NavigationProp<any>}) {
   );
 }
 
-export default Home;
+export default Library;
