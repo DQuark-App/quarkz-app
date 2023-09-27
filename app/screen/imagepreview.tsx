@@ -21,7 +21,6 @@ export default function ImagePreview({
           height: '100%',
           backgroundColor: theme.colors.background,
           paddingTop: 15,
-          paddingRight: 15,
         }}>
         <Row alignItems={'center'} justifyContent={'flex-start'}>
           <IconButton
@@ -32,10 +31,10 @@ export default function ImagePreview({
             size={30}
           />
         </Row>
-        <View style={{flex: 1, padding: 15}}>
+        <View style={{flex: 1}}>
           <Image
             source={{uri: route.params?.uri}}
-            style={{width: '100%', height: '100%', resizeMode: 'contain'}}
+            style={{width: '100%', height: '100%', resizeMode: 'center'}}
           />
         </View>
       </View>

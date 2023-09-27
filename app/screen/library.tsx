@@ -21,10 +21,14 @@ function Library({navigation}: {navigation: NavigationProp<any>}) {
     try {
       let res;
       if (lastTimestamp === 0) {
-        const lastFolder = folders.sorted('updatedAt', true)[0]
-          ? (folders.sorted('updatedAt', true)[0] as Folder).updatedAt.getTime()
-          : lastTimestamp;
-        res = await DQService.instance.getFolder(lastFolder);
+        const lastFolder = realm.objects(Folder).sorted('updatedAt', true)[0];
+
+        let timestamp = lastTimestamp;
+        if (lastFolder) {
+          timestamp = lastFolder.updatedAt.getTime();
+        }
+        console.log(timestamp);
+        res = await DQService.instance.getFolder(timestamp);
       } else {
         res = await DQService.instance.getFolder(lastTimestamp);
       }
@@ -46,7 +50,7 @@ function Library({navigation}: {navigation: NavigationProp<any>}) {
         }
       });
 
-      if (folderRes.length > 0) {
+      if (folderRes.length >= 10) {
         const nextTimestamp = new Date(
           folderRes[folderRes.length - 1].created_at,
         ).getTime();

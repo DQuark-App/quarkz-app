@@ -29,7 +29,6 @@ class DQService {
         return config;
       }
       config.headers.Authorization = token;
-      console.log(token);
       return config;
     });
   }

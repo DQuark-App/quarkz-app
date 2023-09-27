@@ -1,10 +1,14 @@
 import {Card, IconButton, Menu, Portal, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Alert, Text, View} from 'react-native';
+import {Alert, Image, Text, View} from 'react-native';
 import {useState} from 'react';
-import {useRealm} from '../providers';
 import DQService from '../service';
 import AlbumModal from './albummodal';
+// @ts-ignore
+import {IPFS_GATEWAY} from '@env';
+import {useRealm} from '../providers';
+import {File} from '../schema';
+import {Row} from './grid';
 
 type AlbumProps = {
   albumUid: string;
@@ -16,6 +20,7 @@ export default function Album({name, albumUid, onClick}: AlbumProps) {
   const [visible, setVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const realm = useRealm();
+  const file = realm.objects(File).filtered(`albumUid = "${albumUid}"`)[0];
   const onDelete = async () => {
     setVisible(false);
     try {
@@ -57,17 +62,38 @@ export default function Album({name, albumUid, onClick}: AlbumProps) {
         />
       </Portal>
       <Card style={{margin: 5}} onPress={onClick} mode={'outlined'}>
-        <Card.Content>
-          <Icon
-            name={'folder'}
-            color={theme.colors.primary}
-            size={64}
-            style={{alignSelf: 'center', marginBottom: 5}}
-          />
-          <Text style={{fontSize: 16, color: theme.colors.onSurface}}>
-            {name}
-          </Text>
-        </Card.Content>
+        {!file ? (
+          <Card.Content>
+            <Icon
+              name={'folder'}
+              color={theme.colors.primary}
+              size={64}
+              style={{alignSelf: 'center', marginBottom: 5}}
+            />
+            <Text style={{fontSize: 16, color: theme.colors.onSurface}}>
+              {name}
+            </Text>
+          </Card.Content>
+        ) : (
+          <Card.Content>
+            <Row alignItems={'center'} justifyContent={'center'}>
+              <Image
+                source={{uri: IPFS_GATEWAY + file.cid}}
+                style={{
+                  width: '100%',
+                  height: 70,
+                  resizeMode: 'cover',
+                  borderRadius: 3,
+                }}
+              />
+            </Row>
+            <Text
+              style={{fontSize: 16, color: theme.colors.onSurface}}
+              numberOfLines={1}>
+              {name}
+            </Text>
+          </Card.Content>
+        )}
         <Card.Actions style={{height: 32}}>
           <Menu
             visible={visible}

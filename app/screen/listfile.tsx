@@ -29,29 +29,33 @@ export default function ListFile({
 }) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const queryFile = useQuery(File);
   const realm = useRealm();
   const files = queryFile.filtered(`albumUid = "${route.params?.album.uid}"`);
 
   const syncFile = async (lastTimestamp = 0) => {
-    setLoading(true);
     try {
       let res;
       if (lastTimestamp === 0) {
-        const lastFile = files.sorted('createdAt', true)[0]
-          ? (files.sorted('createdAt', true)[0] as File).createdAt.getTime()
-          : lastTimestamp;
+        const lastFile = realm.objects(File).sorted('createdAt', true)[0];
+
+        let timestamp = lastTimestamp;
+        if (lastFile) {
+          timestamp = lastFile.createdAt.getTime();
+        }
+
         res = await DQService.instance.getFiles(
           route.params?.album.uid || '',
-          lastFile,
+          timestamp,
         );
+        console.log(timestamp);
       } else {
         res = await DQService.instance.getFiles(
           route.params?.album.uid || '',
           lastTimestamp,
         );
       }
+      console.log(res.data);
       const fileRes = res.data.data as FileResponse[];
       realm.write(() => {
         for (const file of fileRes) {
@@ -67,7 +71,7 @@ export default function ListFile({
           );
         }
       });
-      if (fileRes.length > 0) {
+      if (fileRes.length >= 10) {
         const nextTimestamp = new Date(
           fileRes[fileRes.length - 1].created_at,
         ).getTime();
@@ -78,7 +82,6 @@ export default function ListFile({
     } catch (e) {
       console.log(e);
     }
-    setLoading(false);
   };
   const pickImage = async () => {
     const grantedCamera = await PermissionsAndroid.check(
@@ -158,7 +161,6 @@ export default function ListFile({
             {route.params?.album.name || 'Album'}
           </Text>
         </Row>
-        {loading && <ActivityIndicator style={{margin: 10}} size={'small'} />}
         <View style={{flex: 1, padding: 15}}>
           <FlatList
             numColumns={2}

@@ -10,9 +10,9 @@ const Stack = createNativeStackNavigator();
 export default function LibraryWrap() {
   return (
     <Stack.Navigator
-      initialRouteName={'Library'}
+      initialRouteName={'LibraryDetail'}
       screenOptions={{navigationBarHidden: true, headerShown: false}}>
-      <Stack.Screen name="Library" component={Library} />
+      <Stack.Screen name="LibraryDetail" component={Library} />
       <Stack.Screen name="File" component={ListFile} />
       <Stack.Screen name="ImagePreview" component={ImagePreview} />
       <Stack.Screen name="Minting" component={Minting} />
