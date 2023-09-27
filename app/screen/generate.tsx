@@ -1,4 +1,11 @@
-import {FlatList, Image, Text, ToastAndroid, View} from 'react-native';
+import {
+  FlatList,
+  Image,
+  ScrollView,
+  Text,
+  ToastAndroid,
+  View,
+} from 'react-native';
 import {
   Button,
   HelperText,
@@ -95,125 +102,150 @@ export default function Generate({
 
   return (
     <>
-      <View
+      <ScrollView
         style={{
           flex: 1,
           width: '100%',
           height: '100%',
           backgroundColor: theme.colors.background,
         }}>
-        <Text
-          disabled={loading}
+        <View
           style={{
-            color: theme.colors.onBackground,
-            fontSize: 30,
-            fontWeight: 'bold',
-            padding: 15,
+            flex: 1,
+            width: '100%',
           }}>
-          Create Art
-        </Text>
-        <Column alignItems={'stretch'} justifyContent={'flex-start'}>
-          <Row alignItems={'center'} justifyContent={'flex-end'}>
-            <SegmentedButtons
-              density={'small'}
-              value={mode}
+          <Text
+            disabled={loading}
+            style={{
+              color: theme.colors.onBackground,
+              fontSize: 30,
+              fontWeight: 'bold',
+              padding: 15,
+            }}>
+            Create Art
+          </Text>
+          <Column alignItems={'stretch'} justifyContent={'flex-start'}>
+            <Row alignItems={'center'} justifyContent={'flex-start'}>
+              <Text
+                style={{
+                  marginRight: 10,
+                  marginLeft: 10,
+                  marginTop: 10,
+                  color: theme.colors.primary,
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                }}>
+                Quality
+              </Text>
+              <View style={{flexGrow: 1}} />
+              <Button
+                mode={mode == 'standard' ? 'outlined' : 'text'}
+                onPress={() => setMode('standard')}
+                style={{marginRight: 10, marginLeft: 10, marginTop: 10}}>
+                <Text style={{color: theme.colors.onBackground}}>Standard</Text>
+              </Button>
+              <Button
+                onPress={() => setMode('hd')}
+                mode={mode == 'hd' ? 'outlined' : 'text'}
+                style={{marginRight: 10, marginLeft: 10, marginTop: 10}}>
+                <Text style={{color: theme.colors.onBackground}}>HD</Text>
+              </Button>
+            </Row>
+            <Text
               style={{
                 marginRight: 10,
                 marginLeft: 10,
                 marginTop: 10,
-                width: 200,
+                color: theme.colors.primary,
+                fontSize: 16,
+                fontWeight: 'bold',
+              }}>
+              Write your NFT idea here
+            </Text>
+            <TextInput
+              style={{
+                marginRight: 10,
+                marginLeft: 10,
+                marginTop: 10,
+                paddingTop: 10,
               }}
-              onValueChange={value => setMode(value)}
-              buttons={[
-                {
-                  value: 'standard',
-                  label: 'Standard',
-                },
-                {
-                  value: 'hd',
-                  label: 'HD',
-                },
-              ]}
+              onChangeText={text => setPrompt(text)}
+              mode={'outlined'}
+              maxLength={300}
+              multiline={true}
+              value={prompt}
+              numberOfLines={4}
+              placeholder={'eg. A cat in a hat'}
             />
-          </Row>
-          <TextInput
-            style={{marginRight: 10, marginLeft: 10, marginTop: 10}}
-            onChangeText={text => setPrompt(text)}
-            mode={'outlined'}
-            label={'Write your NFT idea here'}
-            multiline={true}
-            value={prompt}
-            numberOfLines={4}
-            placeholder={'eg. A cat in a hat'}
-          />
-          <HelperText
-            type="error"
-            visible={hasErrorPrompt()}
-            style={{marginRight: 10, marginLeft: 10, marginTop: 10}}>
-            * Prompt your AI with a sentence!
-          </HelperText>
-          <Text
-            style={{
-              marginRight: 10,
-              marginLeft: 10,
-              marginTop: 10,
-              color: theme.colors.onBackground,
-              fontSize: 16,
-              fontWeight: 'bold',
-            }}>
-            Style
-          </Text>
-          <FlatList
-            style={{marginRight: 10, marginLeft: 10, marginTop: 10}}
-            data={models}
-            numColumns={3}
-            keyExtractor={data => data.name}
-            renderItem={({item}) => {
-              return (
-                <View
-                  style={{
-                    flex: 0.33,
-                    padding: 5,
-                    borderRadius: 10,
-                    backgroundColor:
-                      selectedModel === item.name
-                        ? theme.colors.primary
-                        : theme.colors.background,
-                  }}>
-                  <TouchableRipple
-                    disabled={loading}
-                    onPress={() => {
-                      setSelectedModel(item.name);
+            <HelperText
+              type="error"
+              visible={hasErrorPrompt()}
+              style={{marginRight: 10, marginLeft: 10, marginTop: 10}}>
+              * Prompt your AI with a sentence!
+            </HelperText>
+            <Text
+              style={{
+                marginRight: 10,
+                marginLeft: 10,
+                marginTop: 10,
+                color: theme.colors.primary,
+                fontSize: 16,
+                fontWeight: 'bold',
+              }}>
+              Style
+            </Text>
+            <FlatList
+              style={{marginRight: 10, marginLeft: 10, marginTop: 10}}
+              data={models}
+              numColumns={3}
+              keyExtractor={data => data.name}
+              renderItem={({item}) => {
+                return (
+                  <View
+                    style={{
+                      flex: 0.33,
+                      padding: 5,
+                      borderRadius: 10,
+                      backgroundColor:
+                        selectedModel === item.name
+                          ? theme.colors.primary
+                          : theme.colors.background,
                     }}>
-                    <Image
-                      style={{
-                        borderRadius: 10,
-                        width: '100%',
-                        height: 100,
-                      }}
-                      source={{uri: item.image}}
-                    />
-                  </TouchableRipple>
-                </View>
-              );
-            }}
-          />
-          <HelperText
-            type="error"
-            visible={hasErrorModel()}
-            style={{marginRight: 10, marginLeft: 10, marginTop: 10}}>
-            * Please select a style!
-          </HelperText>
-          <Button
-            onPress={generate}
-            loading={loading}
-            mode={'contained'}
-            style={{margin: 10}}
-            disabled={hasErrorPrompt()}>
-            <Text>Generate</Text>
-          </Button>
-        </Column>
-      </View>
+                    <TouchableRipple
+                      disabled={loading}
+                      onPress={() => {
+                        setSelectedModel(item.name);
+                      }}>
+                      <Image
+                        style={{
+                          borderRadius: 10,
+                          width: '100%',
+                          height: 100,
+                        }}
+                        source={{uri: item.image}}
+                      />
+                    </TouchableRipple>
+                  </View>
+                );
+              }}
+            />
+            <HelperText
+              type="error"
+              visible={hasErrorModel()}
+              style={{marginRight: 10, marginLeft: 10, marginTop: 10}}>
+              * Please select a style!
+            </HelperText>
+            <Button
+              onPress={generate}
+              loading={loading}
+              mode={'contained'}
+              style={{margin: 10}}
+              disabled={hasErrorPrompt()}>
+              <Text>Generate</Text>
+            </Button>
+          </Column>
+        </View>
+      </ScrollView>
     </>
   );
 }

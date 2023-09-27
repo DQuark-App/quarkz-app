@@ -25,7 +25,6 @@ function Setting() {
           style={{
             color: theme.colors.onBackground,
             fontSize: 30,
-            textAlign: 'center',
             fontWeight: 'bold',
           }}>
           Settings

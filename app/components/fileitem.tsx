@@ -1,17 +1,14 @@
-import {Card, IconButton, Menu} from 'react-native-paper';
+import {Card} from 'react-native-paper';
 import {File} from '../schema';
-import {Share, View} from 'react-native';
-import {useState} from 'react';
+import {View} from 'react-native';
 // @ts-ignore
 import {IPFS_GATEWAY} from '@env';
 
 type FileItemProps = {
   file: File;
   onPreview: () => void;
-  onMint: () => void;
 };
-export default function FileItem({file, onPreview, onMint}: FileItemProps) {
-  const [visible, setVisible] = useState(false);
+export default function FileItem({file, onPreview}: FileItemProps) {
   return (
     <View style={{flex: 0.5, padding: 5}}>
       <Card
@@ -19,43 +16,10 @@ export default function FileItem({file, onPreview, onMint}: FileItemProps) {
         onPress={() => {
           onPreview();
         }}>
-        <Card.Cover source={{uri: IPFS_GATEWAY + file.cid}} />
-        <Card.Actions style={{height: 30}}>
-          <Menu
-            visible={visible}
-            onDismiss={() => setVisible(false)}
-            anchor={
-              <IconButton
-                icon={'dots-vertical'}
-                onPress={() => setVisible(true)}
-              />
-            }>
-            <Menu.Item
-              onPress={() => {
-                setVisible(false);
-                onPreview();
-              }}
-              title="Preview"
-              leadingIcon={'magnify'}
-            />
-            <Menu.Item
-              onPress={() => {
-                Share.share({message: IPFS_GATEWAY + file.cid});
-                setVisible(false);
-              }}
-              title="Share link"
-              leadingIcon={'link'}
-            />
-            <Menu.Item
-              onPress={() => {
-                setVisible(false);
-                onMint();
-              }}
-              title="Minting"
-              leadingIcon={'palette-swatch-variant'}
-            />
-          </Menu>
-        </Card.Actions>
+        <Card.Cover
+          source={{uri: IPFS_GATEWAY + file.cid}}
+          style={{zIndex: 1}}
+        />
       </Card>
     </View>
   );

@@ -70,9 +70,6 @@ export default function Album({name, albumUid, onClick}: AlbumProps) {
               size={64}
               style={{alignSelf: 'center', marginBottom: 5}}
             />
-            <Text style={{fontSize: 16, color: theme.colors.onSurface}}>
-              {name}
-            </Text>
           </Card.Content>
         ) : (
           <Card.Content>
@@ -87,14 +84,14 @@ export default function Album({name, albumUid, onClick}: AlbumProps) {
                 }}
               />
             </Row>
-            <Text
-              style={{fontSize: 16, color: theme.colors.onSurface}}
-              numberOfLines={1}>
-              {name}
-            </Text>
           </Card.Content>
         )}
-        <Card.Actions style={{height: 32}}>
+        <Card.Actions style={{height: 50}}>
+          <Text
+            style={{fontSize: 16, color: theme.colors.onSurface, flexGrow: 1}}
+            numberOfLines={1}>
+            {name}
+          </Text>
           <Menu
             visible={visible}
             onDismiss={() => setVisible(false)}

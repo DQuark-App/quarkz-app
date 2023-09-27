@@ -170,11 +170,6 @@ export default function ListFile({
               return (
                 <FileItem
                   file={item}
-                  onMint={() => {
-                    navigation.navigate('Minting', {
-                      uri: IPFS_GATEWAY + item.cid,
-                    });
-                  }}
                   onPreview={() => {
                     navigation.navigate('ImagePreview', {
                       uri: IPFS_GATEWAY + item.cid,
