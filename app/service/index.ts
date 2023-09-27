@@ -15,6 +15,11 @@ export type FileResponse = {
   album_uid: string;
   created_at: string;
 };
+
+export type ModelResponse = {
+  name: string;
+  image: string;
+};
 class DQService {
   private static _instance: DQService;
   private static API: AxiosInstance;
@@ -64,8 +69,8 @@ class DQService {
     return DQService.API.post('/api/metadata', data);
   }
 
-  public async createArt(text: string) {
-    return DQService.API.post('/api/art', {text});
+  public async createArt(text: string, model: string, isHD: boolean) {
+    return DQService.API.post('/api/art', {text, model, isHD});
   }
 
   public getFiles(albumUid: string, lastestTimestamp: number = 0) {
@@ -75,6 +80,10 @@ class DQService {
         '&lastest_timestamp=' +
         lastestTimestamp,
     );
+  }
+
+  public getModels() {
+    return DQService.API.get('/api/model');
   }
   public static get instance() {
     if (!this._instance) {

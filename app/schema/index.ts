@@ -34,8 +34,21 @@ export class File extends Realm.Object<File> {
   };
 }
 
+export class Model extends Realm.Object<File> {
+  public name!: string;
+  public image!: string;
+  static schema = {
+    name: 'Model',
+    primaryKey: 'name',
+    properties: {
+      name: 'string',
+      image: 'string',
+    },
+  };
+}
+
 const realmConfig: Realm.Configuration = {
-  schema: [Folder, File],
+  schema: [Folder, File, Model],
 };
 
 export default realmConfig;
