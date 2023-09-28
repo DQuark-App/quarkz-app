@@ -1,79 +1,53 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+DQuark is innovative app allows you to generate unique and beautiful art pieces, upload them to the IPFS network, and mint them as NFTs on the Solana blockchain.
 
-# Getting Started
+Submission to 2023 Solana Hyperdrive Submission by:
+Alan Maulana ([Github](https://github.com/cryingraven) , [Linkedin](https://www.linkedin.com/in/crlf/))
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+What included features in this MVP :
+- Generate Art From Prompt
+- Folder / Collection And File Management
+- Mint Image As NFT
+- Offline Mode
+- Dark Mode
+- Network Switch Mainnet & Devnet
+- Google Sign In
+- Email Sign In
+- Connect Wallet
 
-## Step 1: Start the Metro Server
+Techstack :
+- WMA from Solana Mobile
+- React Native Paper For UI
+- React Navigation
+- Zustand
+- Realm for offline storage
+- Firebase for Auth , Push Notification
+- PRO Licensed Third AI Service API
+- Next.js for API & Landing Page ([Backend](https://github.com/cryingraven/quarkz-web))
+- Supabase Web & API Database
+- IPFS Storage
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+User flow
+Web 2.0 user :
+User Login -> Prompt Art/Upload -> saved to IPFS and local DB -> if user want to mint must connect wallet
+Web 3.0 user :
+Wallect Connect ->  Prompt Art/Upload -> saved to IPFS and local DB -> Mint Approval -> Minted
 
-To start Metro, run the following command from the _root_ of your React Native project:
+Note: User can mint later
 
-```bash
-# using npm
-npm start
+Limitation of the MVP:
+- For more work load need to upgrade to enterprise license
+- Only allow Image. Need More media support
+- Android Only
 
-# OR using Yarn
-yarn start
+RUN CODE
+follow this instruction https://reactnative.dev/docs/environment-setup
+
+Install all dependencies
+```
+yarn install
 ```
 
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
+Run Android
+```
 yarn android
 ```
-
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `app.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
