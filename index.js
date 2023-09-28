@@ -6,16 +6,12 @@ import {AppRegistry} from 'react-native';
 import {name as appName} from './app.json';
 import 'react-native-get-random-values';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import messaging, {
-  FirebaseMessagingTypes,
-} from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
 import {Buffer} from 'buffer';
 global.Buffer = Buffer;
 import App from './app/app';
-async function onMessageReceived(
-  message: FirebaseMessagingTypes.RemoteMessage,
-) {
+async function onMessageReceived(message) {
   notifee.displayNotification({
     title: message.notification?.title,
     body: message.notification?.body,
