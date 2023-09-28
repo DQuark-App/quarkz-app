@@ -1,4 +1,11 @@
-import {FAB, IconButton, useTheme} from 'react-native-paper';
+import {
+  ActivityIndicator,
+  FAB,
+  IconButton,
+  Modal,
+  Portal,
+  useTheme,
+} from 'react-native-paper';
 import {Row} from '../components/grid';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
@@ -32,6 +39,7 @@ export default function ListFile({
   const queryFile = useQuery(File);
   const realm = useRealm();
   const files = queryFile.filtered(`albumUid = "${route.params?.album.uid}"`);
+  const [loading, setLoading] = useState(false);
 
   const syncFile = async (lastTimestamp = 0) => {
     try {
@@ -93,7 +101,7 @@ export default function ListFile({
         : PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
     );
     if (grantedCamera && grantReadMedua) {
-      console.log('granted');
+      setLoading(true);
       try {
         const image = await ImagePicker.openPicker({
           multiple: false,
@@ -107,20 +115,22 @@ export default function ListFile({
         }
 
         const result = await DQService.instance.uploadFile(
-          route.params?.albumUid || '',
+          route.params?.album.uid || '',
           image.path,
         );
 
         if (result.data.status === 'success') {
           ToastAndroid.show('File uploaded', ToastAndroid.SHORT);
-          syncFile();
         }
+
+        syncFile();
       } catch (e) {
         console.log(e);
         const error = e as AxiosError;
         const errorMessage = error.message || 'Network error';
         Alert.alert('Error', errorMessage);
       }
+      setLoading(false);
     } else {
       await PermissionsAndroid.requestMultiple([
         PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -136,6 +146,19 @@ export default function ListFile({
   }, []);
   return (
     <>
+      <Portal>
+        <Modal
+          theme={theme}
+          visible={loading}
+          dismissable={true}
+          dismissableBackButton={true}>
+          <View style={{flex: 1}}>
+            <Row alignItems={'center'} justifyContent={'center'}>
+              <ActivityIndicator size={'small'} />
+            </Row>
+          </View>
+        </Modal>
+      </Portal>
       <View
         style={{
           flex: 1,

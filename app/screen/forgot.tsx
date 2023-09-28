@@ -3,23 +3,21 @@ import {Button, HelperText, TextInput, useTheme} from 'react-native-paper';
 import {Column, Row} from '../components/grid';
 // @ts-ignore
 import Logo from '../img/logo-no-background.png';
-import auth from '@react-native-firebase/auth';
 import {useState} from 'react';
 import {NavigationProp} from '@react-navigation/native';
-function Register({navigation}: {navigation: NavigationProp<any>}) {
+import auth from '@react-native-firebase/auth';
+function Forgot({navigation}: {navigation: NavigationProp<any>}) {
   const theme = useTheme();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [cpassword, setCPassword] = useState('');
   const [error, setError] = useState('');
   const registerUsingEmail = async () => {
     try {
-      if (errorEmail() || errorPassword() || errorCPassword()) {
+      if (errorEmail()) {
         return;
       }
-      await auth().createUserWithEmailAndPassword(email, password);
+      await auth().sendPasswordResetEmail(email);
 
-      navigation.navigate('Login');
+      navigation.goBack();
     } catch (e) {
       console.log(e);
       setError('Failed to register');
@@ -28,14 +26,6 @@ function Register({navigation}: {navigation: NavigationProp<any>}) {
 
   const errorEmail = () => {
     return email === '' || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
-  };
-
-  const errorPassword = () => {
-    return password === '' || password.length < 6;
-  };
-
-  const errorCPassword = () => {
-    return cpassword === '';
   };
 
   return (
@@ -66,7 +56,7 @@ function Register({navigation}: {navigation: NavigationProp<any>}) {
                 fontSize: 30,
                 fontWeight: 'bold',
               }}>
-              Register
+              Forgot Password
             </Text>
           </Row>
           <HelperText type="error" visible={error !== ''}>
@@ -86,40 +76,8 @@ function Register({navigation}: {navigation: NavigationProp<any>}) {
           <HelperText type="error" visible={errorEmail()}>
             * Email address is not invalid!
           </HelperText>
-          <TextInput
-            theme={theme}
-            mode={'outlined'}
-            textContentType={'password'}
-            secureTextEntry={true}
-            style={{
-              backgroundColor: theme.colors.surface,
-              marginBottom: 8,
-            }}
-            onChangeText={setPassword}
-            textColor={theme.colors.onSurface}
-            label={'Password'}
-          />
-          <HelperText type="error" visible={errorPassword()}>
-            * Password is Empty! (min. 6 character)
-          </HelperText>
-          <TextInput
-            theme={theme}
-            mode={'outlined'}
-            textContentType={'password'}
-            secureTextEntry={true}
-            style={{
-              backgroundColor: theme.colors.surface,
-              marginBottom: 8,
-            }}
-            onChangeText={setCPassword}
-            textColor={theme.colors.onSurface}
-            label={'Password Confirmation'}
-          />
-          <HelperText type="error" visible={errorCPassword()}>
-            * Password Confirmation is Empty!
-          </HelperText>
           <Button
-            disabled={errorEmail() || errorPassword() || errorCPassword()}
+            disabled={errorEmail()}
             mode={'contained'}
             style={{marginBottom: 8}}
             onPress={registerUsingEmail}>
@@ -130,11 +88,8 @@ function Register({navigation}: {navigation: NavigationProp<any>}) {
             onPress={() => {
               navigation.goBack();
             }}>
-            <Text style={{color: theme.colors.onBackground}}>
-              Already Has Account ?{' '}
-            </Text>
             <Text style={{color: theme.colors.onSurface, fontWeight: 'bold'}}>
-              Login Here
+              Back to Login
             </Text>
           </Button>
         </Column>
@@ -143,4 +98,4 @@ function Register({navigation}: {navigation: NavigationProp<any>}) {
   );
 }
 
-export default Register;
+export default Forgot;

@@ -84,6 +84,15 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
           <HelperText type="error" visible={errorEmail()}>
             * Email address is not invalid!
           </HelperText>
+          <Text
+            onPress={() => navigation.navigate('Forgot')}
+            style={{
+              color: theme.colors.onBackground,
+              marginBottom: 8,
+              alignSelf: 'flex-end',
+            }}>
+            Forgot Password ?
+          </Text>
           <TextInput
             theme={theme}
             mode={'outlined'}
