@@ -5,6 +5,8 @@ DQuark is innovative app allows you to generate unique and beautiful art pieces,
 Submission to 2023 Solana Hyperdrive Submission by:
 Alan Maulana ([Github](https://github.com/cryingraven) , [Linkedin](https://www.linkedin.com/in/crlf/))
 
+### Resources
+- [Demo Video](https://youtu.be/HXxkrgyiszU)
 ### What included features in this MVP :
 - Generate Art From Prompt
 - Folder / Collection And File Management
