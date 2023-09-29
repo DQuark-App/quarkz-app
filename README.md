@@ -7,6 +7,9 @@ Alan Maulana ([Github](https://github.com/cryingraven) , [Linkedin](https://www.
 
 ### Resources
 - [Demo Video](https://youtu.be/HXxkrgyiszU)
+- [Landing Page](https://dquark,network/)
+- [Pitch Deck](https://docs.google.com/presentation/d/e/2PACX-1vRK9ibyxGwVfC81ThU3EhcLmsV4CgHg3DZ7fo1y5mUwJ05bROJ-z6soxTNgMjinrj38BgYweWQ87OJ0/pub?start=false&loop=false&delayms=3000)
+
 ### What included features in this MVP :
 - Generate Art From Prompt
 - Folder / Collection And File Management
