@@ -3,7 +3,7 @@
 DQuark is innovative app allows you to generate unique and beautiful art pieces, upload them to the IPFS network, and mint them as NFTs on the Solana blockchain.
 
 Submission to 2023 Solana Hyperdrive Submission by:
-Alan Maulana ([Github](https://github.com/cryingraven) , [Linkedin](https://www.linkedin.com/in/crlf/))
+- Alan Maulana ([Github](https://github.com/cryingraven) , [Linkedin](https://www.linkedin.com/in/crlf/))
 
 ### Resources
 - [Demo Video](https://youtu.be/HXxkrgyiszU)
