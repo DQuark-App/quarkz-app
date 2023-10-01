@@ -10,7 +10,7 @@ Submission to 2023 Solana Hyperdrive Submission by:
 - [Landing Page](https://dquark.network/)
 - [Pitch Deck](https://docs.google.com/presentation/d/e/2PACX-1vRK9ibyxGwVfC81ThU3EhcLmsV4CgHg3DZ7fo1y5mUwJ05bROJ-z6soxTNgMjinrj38BgYweWQ87OJ0/pub?start=false&loop=false&delayms=3000)
 - [APK](https://drive.google.com/file/d/1npg1vK2BhzHImeP2UDNpzzHC5psYVt8G/view?usp=sharing)
-- Google Play Store (Coming Soon)
+- [Google Play Store](https://play.google.com/store/apps/details?id=com.dquark.quarkz)
 
 ### What included features in this MVP :
 - Generate Art From Prompt
