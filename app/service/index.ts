@@ -36,6 +36,13 @@ class DQService {
       config.headers.Authorization = token;
       return config;
     });
+
+    DQService.API.interceptors.response.use(response => {
+      if (response.data) {
+        console.log(response.request.responseURL, response.data);
+      }
+      return response;
+    });
   }
 
   public getFolder(lastestTimestamp: number = 0) {

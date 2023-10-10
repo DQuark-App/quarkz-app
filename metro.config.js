@@ -7,6 +7,7 @@ const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
  * @type {import('metro-config').MetroConfig}
  */
 const config = {
+  resetCache: true,
   resolver: {
     extraNodeModules: {
       crypto: require.resolve('crypto-browserify'),

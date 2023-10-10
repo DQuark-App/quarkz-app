@@ -1,6 +1,6 @@
 import {Card} from 'react-native-paper';
 import {File} from '../schema';
-import {View} from 'react-native';
+import {Image, View} from 'react-native';
 // @ts-ignore
 import {IPFS_GATEWAY} from '@env';
 
@@ -16,9 +16,10 @@ export default function FileItem({file, onPreview}: FileItemProps) {
         onPress={() => {
           onPreview();
         }}>
-        <Card.Cover
+        <Image
           source={{uri: IPFS_GATEWAY + file.cid}}
-          style={{zIndex: 1}}
+          style={{zIndex: 1, borderRadius: 20, resizeMode: 'cover'}}
+          height={200}
         />
       </Card>
     </View>

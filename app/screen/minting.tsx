@@ -10,7 +10,7 @@ import {Alert, Image, Text, ToastAndroid, View} from 'react-native';
 import {Column, Row} from '../components/grid';
 import {useState} from 'react';
 import DQService from '../service';
-import {mintNFT} from '../utils/wallet';
+import {mintNFT, signMessage} from '../utils/wallet';
 import useStore from '../store';
 
 export default function Minting({
@@ -41,19 +41,27 @@ export default function Minting({
 
   const onmintNFT = async () => {
     setLoading(true);
-    await uploadMetadata();
     try {
-      await mintNFT(
-        route.params?.uri,
-        name,
-        store.walletToken,
-        store.walletPubKey,
-        store.network,
-      );
+      console.log(store.walletPubKey);
+      if (!store.walletToken || !store.walletPubKey) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const [DQToken, pubKey, walletAuth] = await signMessage(store.network);
+        store.setWalletToken(walletAuth, pubKey);
+      } else {
+        await uploadMetadata();
 
-      ToastAndroid.show('NFT Minted', ToastAndroid.SHORT);
+        await mintNFT(
+          route.params?.uri,
+          name,
+          store.walletToken,
+          store.walletPubKey,
+          store.network,
+        );
 
-      navigation.goBack();
+        ToastAndroid.show('NFT Minted', ToastAndroid.SHORT);
+
+        navigation.goBack();
+      }
     } catch (e) {
       console.log(e);
       Alert.alert('Error', 'Failed to mint NFT');

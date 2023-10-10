@@ -63,7 +63,6 @@ export default function ListFile({
           lastTimestamp,
         );
       }
-      console.log(res.data);
       const fileRes = res.data.data as FileResponse[];
       realm.write(() => {
         for (const file of fileRes) {

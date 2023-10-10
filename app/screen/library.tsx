@@ -1,5 +1,5 @@
 import {Alert, FlatList, Text, ToastAndroid, View} from 'react-native';
-import {ActivityIndicator, FAB, Portal, useTheme} from 'react-native-paper';
+import {FAB, Portal, useTheme} from 'react-native-paper';
 import {useEffect, useState} from 'react';
 import {useQuery, useRealm} from '../providers';
 import {Folder} from '../schema';

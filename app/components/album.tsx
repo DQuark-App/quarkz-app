@@ -44,7 +44,9 @@ export default function Album({name, albumUid, onClick}: AlbumProps) {
       if (res.data.status === 'success') {
         realm.write(() => {
           const folder = realm.objectForPrimaryKey('Folder', albumUid);
-          if (folder) folder.name = name;
+          if (folder) {
+            folder.name = name;
+          }
         });
       }
     } catch (e) {
@@ -67,7 +69,7 @@ export default function Album({name, albumUid, onClick}: AlbumProps) {
             <Icon
               name={'folder'}
               color={theme.colors.primary}
-              size={64}
+              size={92}
               style={{alignSelf: 'center', marginBottom: 5}}
             />
           </Card.Content>
@@ -78,9 +80,9 @@ export default function Album({name, albumUid, onClick}: AlbumProps) {
                 source={{uri: IPFS_GATEWAY + file.cid}}
                 style={{
                   width: '100%',
-                  height: 70,
+                  height: 100,
                   resizeMode: 'cover',
-                  borderRadius: 3,
+                  borderRadius: 10,
                 }}
               />
             </Row>

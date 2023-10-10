@@ -241,7 +241,7 @@ export default function Generate({
               loading={loading}
               mode={'contained'}
               style={{margin: 10}}
-              disabled={hasErrorPrompt()}>
+              disabled={hasErrorPrompt() || hasErrorModel()}>
               <Text>Generate</Text>
             </Button>
           </Column>
