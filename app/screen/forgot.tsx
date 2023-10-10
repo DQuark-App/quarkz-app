@@ -6,6 +6,7 @@ import Logo from '../img/logo-no-background.png';
 import {useState} from 'react';
 import {NavigationProp} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
+import crashlytics from '@react-native-firebase/crashlytics';
 function Forgot({navigation}: {navigation: NavigationProp<any>}) {
   const theme = useTheme();
   const [email, setEmail] = useState('');
@@ -18,7 +19,8 @@ function Forgot({navigation}: {navigation: NavigationProp<any>}) {
       await auth().sendPasswordResetEmail(email);
 
       navigation.goBack();
-    } catch (e) {
+    } catch (e: any) {
+      crashlytics().log(e.message || 'Error registering with email');
       console.log(e);
       setError('Failed to register');
     }

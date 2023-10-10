@@ -23,6 +23,7 @@ import {IPFS_GATEWAY} from '@env';
 import {AxiosError} from 'axios';
 import {useQuery, useRealm} from '../providers';
 import {Model} from '../schema';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 export default function Generate({
   navigation,
@@ -54,7 +55,8 @@ export default function Generate({
           );
         }
       });
-    } catch (e) {
+    } catch (e: any) {
+      crashlytics().log(e.message || 'Error syncing models');
       console.log(e);
     }
   };

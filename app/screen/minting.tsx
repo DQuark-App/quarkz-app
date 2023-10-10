@@ -12,6 +12,7 @@ import {useState} from 'react';
 import DQService from '../service';
 import {mintNFT, signMessage} from '../utils/wallet';
 import useStore from '../store';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 export default function Minting({
   route,
@@ -62,7 +63,8 @@ export default function Minting({
 
         navigation.goBack();
       }
-    } catch (e) {
+    } catch (e: any) {
+      crashlytics().log(e.message || 'Error minting NFT');
       console.log(e);
       Alert.alert('Error', 'Failed to mint NFT');
     }

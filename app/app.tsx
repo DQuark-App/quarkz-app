@@ -10,6 +10,7 @@ import {PermissionsAndroid, Platform} from 'react-native';
 import ImagePreview from './screen/imagepreview';
 import Minting from './screen/minting';
 import Forgot from './screen/forgot';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const Stack = createNativeStackNavigator();
 //Use {navigation} : {navigation: NavigationProp} on pros to get navigation prop
@@ -35,7 +36,8 @@ function App() {
           PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
         ]);
       }
-    } catch (e) {
+    } catch (e: any) {
+      crashlytics().log(e.message || 'Error requesting permissions');
       console.log(e);
     }
   }, []);

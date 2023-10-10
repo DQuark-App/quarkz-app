@@ -8,6 +8,7 @@ import Album from '../components/album';
 import AlbumModal from '../components/albummodal';
 import {NavigationProp} from '@react-navigation/native';
 import useStore from '../store';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 function Library({navigation}: {navigation: NavigationProp<any>}) {
   const store = useStore();
@@ -59,7 +60,8 @@ function Library({navigation}: {navigation: NavigationProp<any>}) {
           syncFolder(nextTimestamp);
         }
       }
-    } catch (e) {
+    } catch (e: any) {
+      crashlytics().log(e.message || 'Error syncing folders');
       console.log(e);
     }
   };

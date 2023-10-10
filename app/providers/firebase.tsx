@@ -2,6 +2,7 @@ import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {createContext, ReactNode, useEffect, useState} from 'react';
 import useStore from '../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 type DQuarkUser = FirebaseAuthTypes.User | null;
 
@@ -18,6 +19,7 @@ export const FirebaseProvider = ({children}: {children: ReactNode}) => {
           const token = await newUser.getIdToken();
           await AsyncStorage.setItem('token', token);
           store.setIdToken(token);
+          await crashlytics().setUserId(newUser.uid);
         }
         setUser(newUser);
         store.setUser(newUser);

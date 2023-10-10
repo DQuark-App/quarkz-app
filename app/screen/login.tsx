@@ -8,6 +8,7 @@ import {useState} from 'react';
 import {NavigationProp} from '@react-navigation/native';
 import LoginGoogle from '../components/logingoogle';
 import LoginWallet from '../components/loginwallet';
+import crashlytics from '@react-native-firebase/crashlytics';
 function Login({navigation}: {navigation: NavigationProp<any>}) {
   const theme = useTheme();
   const [email, setEmail] = useState('');
@@ -22,7 +23,8 @@ function Login({navigation}: {navigation: NavigationProp<any>}) {
         return;
       }
       await auth().signInWithEmailAndPassword(email, password);
-    } catch (e) {
+    } catch (e: any) {
+      crashlytics().log(e.message || 'Error logging in with email');
       console.log(e);
       setError('Invalid Email or Password');
     }

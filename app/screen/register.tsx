@@ -6,6 +6,7 @@ import Logo from '../img/logo-no-background.png';
 import auth from '@react-native-firebase/auth';
 import {useState} from 'react';
 import {NavigationProp} from '@react-navigation/native';
+import crashlytics from '@react-native-firebase/crashlytics';
 function Register({navigation}: {navigation: NavigationProp<any>}) {
   const theme = useTheme();
   const [email, setEmail] = useState('');
@@ -20,7 +21,8 @@ function Register({navigation}: {navigation: NavigationProp<any>}) {
       await auth().createUserWithEmailAndPassword(email, password);
 
       navigation.navigate('Login');
-    } catch (e) {
+    } catch (e: any) {
+      crashlytics().log(e.message || 'Error registering with email');
       console.log(e);
       setError('Failed to register');
     }

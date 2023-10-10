@@ -3,6 +3,7 @@ import {Text, ToastAndroid} from 'react-native';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import {useState} from 'react';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 export default function LoginGoogle() {
   const theme = useTheme();
@@ -15,7 +16,8 @@ export default function LoginGoogle() {
       const {idToken} = await GoogleSignin.signIn();
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       return auth().signInWithCredential(googleCredential);
-    } catch (e) {
+    } catch (e: any) {
+      crashlytics().log(e.message || 'Error logging in with Google');
       console.log(e);
       ToastAndroid.show('Failed to login', ToastAndroid.SHORT);
     }

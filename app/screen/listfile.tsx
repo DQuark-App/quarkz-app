@@ -26,6 +26,7 @@ import {File} from '../schema';
 import FileItem from '../components/fileitem';
 // @ts-ignore
 import {IPFS_GATEWAY} from '@env';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 export default function ListFile({
   route,
@@ -86,7 +87,8 @@ export default function ListFile({
           syncFile(nextTimestamp);
         }
       }
-    } catch (e) {
+    } catch (e: any) {
+      crashlytics().log(e.message || 'Error syncing files');
       console.log(e);
     }
   };
@@ -123,7 +125,8 @@ export default function ListFile({
         }
 
         syncFile();
-      } catch (e) {
+      } catch (e: any) {
+        crashlytics().log(e.message || 'Error uploading file');
         console.log(e);
         const error = e as AxiosError;
         const errorMessage = error.message || 'Network error';
