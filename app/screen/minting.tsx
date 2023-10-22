@@ -133,7 +133,6 @@ export default function Minting({
               mode={'outlined'}
               contentStyle={{height: 100}}
               multiline={true}
-              inputMode={'numeric'}
               style={{
                 backgroundColor: theme.colors.surface,
                 marginBottom: 8,
