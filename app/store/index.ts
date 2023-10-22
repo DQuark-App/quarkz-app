@@ -13,7 +13,9 @@ interface AppState {
   isNewNotification: boolean;
   walletToken: string | null;
   walletPubKey: string | null;
+  activeStyle: string | null;
   network: string;
+  setActiveStyle: (style: string) => void;
   setNetwork: (network: string) => void;
   setDarkMode: (isDarkMode: boolean) => void;
   setPushNotification: (isNotificationEnabled: boolean) => void;
@@ -36,6 +38,9 @@ const useStore = create<AppState>()(
         network: 'mainnet',
         walletToken: null,
         walletPubKey: null,
+        activeStyle: null,
+        setActiveStyle: newStyle =>
+          set(state => ({...state, activeStyle: newStyle})),
         setNetwork: newNetwork =>
           set(state => ({...state, network: newNetwork})),
         setIdToken: newToken => {

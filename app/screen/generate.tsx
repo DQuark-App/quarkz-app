@@ -1,17 +1,10 @@
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  Text,
-  ToastAndroid,
-  View,
-} from 'react-native';
+import {ScrollView, Text, ToastAndroid, View} from 'react-native';
 import {
   Button,
   HelperText,
-  SegmentedButtons,
+  Modal,
+  Portal,
   TextInput,
-  TouchableRipple,
   useTheme,
 } from 'react-native-paper';
 import {Column, Row} from '../components/grid';
@@ -21,9 +14,10 @@ import {NavigationProp} from '@react-navigation/native';
 // @ts-ignore
 import {IPFS_GATEWAY} from '@env';
 import {AxiosError} from 'axios';
-import {useQuery, useRealm} from '../providers';
+import {useRealm} from '../providers';
 import {Model} from '../schema';
 import crashlytics from '@react-native-firebase/crashlytics';
+import Styleselector from '../components/styleselector';
 
 export default function Generate({
   navigation,
@@ -34,8 +28,9 @@ export default function Generate({
   const [mode, setMode] = useState('standard');
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isSelect, setSelected] = useState(false);
+  const [init, setInit] = useState(false);
   const [selectedModel, setSelectedModel] = useState('');
-  const models = useQuery(Model);
   const realm = useRealm();
 
   const syncModels = async () => {
@@ -99,11 +94,42 @@ export default function Generate({
   };
 
   useEffect(() => {
-    syncModels();
-  }, []);
+    if (!init) {
+      syncModels();
+      setInit(true);
+    }
+  }, [init]);
 
   return (
     <>
+      <Portal>
+        <Modal
+          style={{flex: 1}}
+          onDismiss={() => setSelected(false)}
+          theme={theme}
+          visible={isSelect}
+          dismissable={true}
+          contentContainerStyle={{
+            padding: 10,
+            margin: 10,
+            backgroundColor: theme.colors.background,
+            borderRadius: 10,
+            zIndex: 1000,
+          }}
+          dismissableBackButton={true}>
+          <Column alignItems={'flex-start'} justifyContent={'center'}>
+            <Text style={{color: theme.colors.primary, fontWeight: 'bold'}}>
+              SELECT STYLE
+            </Text>
+            <Styleselector
+              onSelect={item => {
+                setSelectedModel(item.name);
+                setSelected(false);
+              }}
+            />
+          </Column>
+        </Modal>
+      </Portal>
       <ScrollView
         style={{
           flex: 1,
@@ -165,6 +191,7 @@ export default function Generate({
               Write your NFT idea here
             </Text>
             <TextInput
+              disabled={loading}
               style={{
                 marginRight: 10,
                 marginLeft: 10,
@@ -185,53 +212,28 @@ export default function Generate({
               style={{marginRight: 10, marginLeft: 10, marginTop: 10}}>
               * Prompt your AI with a sentence!
             </HelperText>
-            <Text
-              style={{
-                marginRight: 10,
-                marginLeft: 10,
-                marginTop: 10,
-                color: theme.colors.onBackground,
-                fontSize: 16,
-                fontWeight: 'bold',
-              }}>
-              Style
-            </Text>
-            <FlatList
-              style={{marginRight: 10, marginLeft: 10, marginTop: 10}}
-              data={models}
-              numColumns={3}
-              scrollEnabled={false}
-              keyExtractor={data => data.name}
-              renderItem={({item}) => {
-                return (
-                  <View
-                    style={{
-                      flex: 0.33,
-                      padding: 5,
-                      borderRadius: 10,
-                      backgroundColor:
-                        selectedModel === item.name
-                          ? theme.colors.primary
-                          : theme.colors.background,
-                    }}>
-                    <TouchableRipple
-                      disabled={loading}
-                      onPress={() => {
-                        setSelectedModel(item.name);
-                      }}>
-                      <Image
-                        style={{
-                          borderRadius: 10,
-                          width: '100%',
-                          height: 100,
-                        }}
-                        source={{uri: item.image}}
-                      />
-                    </TouchableRipple>
-                  </View>
-                );
-              }}
-            />
+            <Row alignItems={'center'} justifyContent={'space-between'}>
+              <Text
+                style={{
+                  marginRight: 10,
+                  marginLeft: 10,
+                  marginTop: 10,
+                  color: theme.colors.onBackground,
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                }}>
+                Style
+              </Text>
+              <Button
+                onPress={() => setSelected(true)}
+                mode={'text'}
+                style={{marginRight: 10, marginLeft: 10, marginTop: 10}}
+                disabled={loading}>
+                {selectedModel
+                  ? selectedModel.replaceAll('-', ' ').toUpperCase()
+                  : 'Select Style'}
+              </Button>
+            </Row>
             <HelperText
               type="error"
               visible={hasErrorModel()}

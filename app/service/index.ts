@@ -90,7 +90,9 @@ class DQService {
   }
 
   public getModels() {
-    return DQService.API.get('/api/model');
+    return DQService.API.get('/api/model', {
+      headers: {'Cache-Control': 'no-cache'},
+    });
   }
   public static get instance() {
     if (!this._instance) {
